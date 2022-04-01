@@ -15,13 +15,10 @@ jobs:
         fi
         
         mkdir Auto-build
-        cp -r src Auto-build
+        cp -r bin Auto-build
         cd Auto-build
         zip -r maintenance-alerts.zip .
-        echo `date` >> build.txt
-      
-    - name: Release to Github
-      run: echo "Release"
+        
     
     - name: Commit files
       id: commit
