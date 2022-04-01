@@ -15,7 +15,8 @@ jobs:
         fi
         mkdir Auto-Backup
         zip -r backup.zip .
-        cp -r backup.zip Auto-Backup     
+        cp -r backup.zip Auto-Backup
+        rm backup.zip
         
     - name: Commit files
       run: |
