@@ -29,10 +29,15 @@ jobs:
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
         git add --all
-        git commit -m "Add changes" -a
+        if [-z "$(git status --porcelain)"]; then
+           echo "::set-output name=push::false"
+        else
+           git commit -m "Add changes" -a
+           echo "::set-output name=push::true"
+        fi
       shell: bash
-      
     - name: Push to GitHub repo
+      if: steps.commit.outputs.push == 'true'
       uses: ad-m/github-push-action@master
       with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
