@@ -35,7 +35,6 @@ jobs:
         catch || {
           echo "nothing to commit, working tree clean"
         }
-
       shell: bash
     - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
