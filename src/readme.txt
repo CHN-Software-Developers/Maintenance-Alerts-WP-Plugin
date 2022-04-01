@@ -3,7 +3,7 @@ Contributors: Himashana
 Tags: Maintenance, alerts, Himashana, Maintenance alerts, Top bar, Top text, text
 Requires at least: 5.2
 Tested up to: 5.9
-Stable tag: 1.1.4 (dev)
+Stable tag: 1.1.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
