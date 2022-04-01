@@ -11,7 +11,7 @@ jobs:
     - name: zip the code
       run: |
         mkdir Auto-build
-        cp -r /src /Auto-build
+        cp -r src Auto-build
         cd Auto-build
         zip -r auto-build.zip .
       
