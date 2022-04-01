@@ -10,16 +10,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        if [ -d "Auto-build" ]; then
-          rm -r Auto-build
-        fi
-        
         mkdir Auto-build
         cp -r bin Auto-build
         cd Auto-build
         zip -r maintenancealerts.zip .
         
-    
     - name: Commit files
       id: commit
       run: |
@@ -28,8 +23,8 @@ jobs:
         git add --all
         git commit -m "Add changes" -a
 # git commit -m "Add changes"
-        
       shell: bash
+      
     - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
       with:
