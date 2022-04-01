@@ -12,3 +12,22 @@ jobs:
       run: zip -r release.zip .
     - name: Release to Github
       run: echo "Release"
+    
+    - name: Commit files
+      id: commit
+      run: |
+        git config --local user.email "himashanasuraweera5@gmail.com"
+        git config --local user.name "Himashana"
+        git add --all
+        if [-z "$(git status --porcelain)"]; then
+           echo "::set-output name=push::false"
+        else
+           git commit -m "Add changes" -a
+           echo "::set-output name=push::true"
+        fi
+      shell: bash
+    - name: Push changes
+      if: steps.commit.outputs.push == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
