@@ -13,7 +13,6 @@ jobs:
         rm -r Auto-build
         mkdir Auto-build
         cp -r src Auto-build
-        cd src
         zip -r maintenance-alerts.zip .
       
     - name: Release to Github
