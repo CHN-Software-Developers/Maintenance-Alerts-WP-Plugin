@@ -18,7 +18,6 @@ jobs:
         cp -r backup.zip Auto-Backup     
         
     - name: Commit files
-      id: commit
       run: |
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
@@ -49,7 +48,6 @@ jobs:
         zip -r maintenance-alerts.zip .
         
     - name: Commit files
-      id: commit
       run: |
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
