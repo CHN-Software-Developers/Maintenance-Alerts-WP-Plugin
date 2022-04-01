@@ -19,7 +19,7 @@ jobs:
         cd Auto-build-Plugin
         mv src maintenance-alerts
         zip -r maintenance-alerts.zip .
-        echo "$PATH"
+        pwd
         
     - name: Commit files
       id: commit
@@ -42,4 +42,4 @@ jobs:
     - uses: actions/checkout@v1
     - name: Test path
       run: |
-        echo "$PATH"
+        pwd
