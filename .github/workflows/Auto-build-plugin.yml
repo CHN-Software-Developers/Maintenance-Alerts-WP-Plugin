@@ -6,12 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-#     outputs:
-#       fileoutput: ${{ steps.buildoutput.outputs.zipfile }}
     steps:
     - uses: actions/checkout@v1
     - name: zip the code
-    - id: buildoutput
       run: |
         if [ -d "Auto-build-Plugin" ]; then
           rm -r Auto-build-Plugin
@@ -23,11 +20,6 @@ jobs:
         mv src maintenance-alerts
         zip -r maintenance-alerts.zip .
         
-#     echo "::set-output name=zipfile::zip -r maintenance-alerts.zip ."
-  commit-files:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:      
     - name: Commit files
       id: commit
       run: |
@@ -37,10 +29,7 @@ jobs:
         git commit -m "Auto-build"
 # git commit -m "Add changes"
       shell: bash
-  Push-to-git-repo:
-    runs-on: ubuntu-latest
-    needs: [build, commit-files]
-    steps:    
+      
     - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
       with:
