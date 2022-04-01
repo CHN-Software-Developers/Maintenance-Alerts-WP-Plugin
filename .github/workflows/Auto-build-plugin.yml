@@ -1,4 +1,4 @@
-name: Auto-build-project
+name: Auto-build-plugin
 on:
   push:
     branches:
