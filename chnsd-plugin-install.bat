@@ -7,4 +7,6 @@ cd ..
 cd ..
 copy src wordpress\wp-content\plugins\maintenance-alerts
 
+echo -------------------------------
 echo Plugin installed successfully.
+echo -------------------------------

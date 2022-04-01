@@ -6,4 +6,7 @@ rmdir maintenance-alerts
 cd ..
 cd ..
 cd ..
+
+echo -------------------------------
 echo Plugin uninstalled successfully.
+echo -------------------------------
