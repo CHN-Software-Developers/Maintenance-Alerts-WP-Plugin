@@ -10,6 +10,6 @@ jobs:
       with:
         type: 'zip'
         filename: 'maintenance-alerts.zip'
-        path: 'bin/trunk'
-        directory: 'bin'
+        path: '/bin/trunk'
+        directory: '/bin'
         exclusions: '*.git* /*node_modules/* .editorconfig'
