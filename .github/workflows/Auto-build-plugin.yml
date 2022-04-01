@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        zip -r maintenance-alerts.zip .
+        zip -r maintenance-alerts.zip src
         
     - name: Commit files
       id: commit
