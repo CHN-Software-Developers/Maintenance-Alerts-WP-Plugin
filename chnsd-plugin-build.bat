@@ -10,4 +10,7 @@ cd bin
 mkdir trunk
 cd ..
 copy src bin\trunk
+
+echo -------------------------------
 echo Plugin built successfully.
+echo -------------------------------
