@@ -43,4 +43,5 @@ jobs:
     - name: Test path
       run: |
         pwd
+        ls
         git status
