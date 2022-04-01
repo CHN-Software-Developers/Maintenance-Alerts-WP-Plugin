@@ -18,6 +18,7 @@ jobs:
         cp -r src Auto-build
         cd Auto-build
         zip -r maintenance-alerts.zip .
+        echo `date` >> build.txt
       
     - name: Release to Github
       run: echo "Release"
