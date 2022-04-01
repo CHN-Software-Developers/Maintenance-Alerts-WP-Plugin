@@ -8,9 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Zip Folder
+    - name: zip the code
       run: |
-        cd bin
+        mkdir Auto-build
+        cp -r /src /Auto-build
+        cd Auto-build
         zip -r auto-build.zip .
       
     - name: Release to Github
@@ -24,7 +26,8 @@ jobs:
         git add --all
         git commit -m "Add changes" -a
       shell: bash
-    - name: Push changes
+      
+    - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
       with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
