@@ -10,13 +10,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        if [ -d "Auto-build" ] then
-            rm -r Auto-build
-            mkdir Auto-build
-        else
-            mkdir Auto-build
+        if [ -d "Auto-build" ]; then
+          rm -r Auto-build
         fi
         
+        mkdir Auto-build
         cp -r src Auto-build
         cd Auto-build
         zip -r maintenance-alerts.zip .
