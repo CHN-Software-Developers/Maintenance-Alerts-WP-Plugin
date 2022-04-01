@@ -27,4 +27,4 @@ jobs:
 
       - name: Zip output
         run: zip -qq -r function.zip dist node_modules package.json
-        working-directory: .src
+        working-directory: src/
