@@ -17,7 +17,7 @@ jobs:
         mkdir Auto-build
         cp -r bin Auto-build
         cd Auto-build
-        zip -r maintenance-alerts.zip .
+        zip -r maintenancealerts.zip .
         
     
     - name: Commit files
