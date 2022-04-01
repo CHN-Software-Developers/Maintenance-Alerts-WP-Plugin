@@ -17,6 +17,7 @@ jobs:
         mkdir Auto-build-Plugin
         cp -r src Auto-build-Plugin
         cd Auto-build-Plugin
+        mv src maintenance-alerts
         zip -r maintenance-alerts.zip .
         
     - name: Commit files
