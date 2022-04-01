@@ -30,7 +30,7 @@ jobs:
         git config --local user.name "Himashana"
         git add --all
         try (
-          'it commit -m "Add changes"'
+          commit -m "Add changes"
         ) catch || {
           echo "nothing to commit. working tree clean"
         }
