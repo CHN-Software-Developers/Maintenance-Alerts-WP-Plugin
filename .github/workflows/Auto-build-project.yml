@@ -29,8 +29,10 @@ jobs:
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
         git add --all
-        try{
+        try(
           git commit -m "Add changes"
+        )catch || {
+          echo "nothing to commit, working tree clean"
         }
 
       shell: bash
