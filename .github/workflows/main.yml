@@ -26,5 +26,5 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r function.zip dist node_modules package.json
+        run: zip -qq -r function.zip src
         working-directory: .
