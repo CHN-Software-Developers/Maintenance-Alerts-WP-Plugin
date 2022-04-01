@@ -14,7 +14,7 @@ jobs:
         mkdir Auto-build
         cp -r src Auto-build
         cd Auto-build
-        zip -r maintenance-alerts.zip src
+        zip -r maintenance-alerts.zip .
       
     - name: Release to Github
       run: echo "Release"
