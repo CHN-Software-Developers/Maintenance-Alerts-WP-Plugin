@@ -28,4 +28,4 @@ jobs:
         uses: montudor/action-zip@v1.0.0
         with:
           # See montudor/action-zip README.md for more info
-          args: zip -qq -r dir.zip dir
+          args: zip -qq -r out.zip bin
