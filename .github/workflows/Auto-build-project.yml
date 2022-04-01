@@ -31,9 +31,8 @@ jobs:
         git add --all
         try (
           git commit -m "Add changes"
-        )
-        catch || {
-          echo "nothing to commit, working tree clean"
+        ) catch || {
+          echo "nothing to commit. working tree clean"
         }
       shell: bash
     - name: Push to GitHub repo
