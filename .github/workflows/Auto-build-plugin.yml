@@ -39,7 +39,7 @@ jobs:
       - name: zip the code
         run: |
           if [ -d "Auto-build-Plugin" ]; then
-            zip -r maintenance-alerts.zip ./Auto-build-Plugin
+            zip -r Auto-build-backup.zip ./Auto-build-Plugin
           fi
 
       - name: Commit files
@@ -65,6 +65,8 @@ jobs:
       run: |
         if [ -d "Auto-build-Plugin" ]; then
           rm -r Auto-build-Plugin
+          cp -r Auto-build-backup.zip Auto-Backup
+          rm Auto-build-backup.zip
         fi
         
         mkdir Auto-build-Plugin
