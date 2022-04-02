@@ -44,6 +44,8 @@ jobs:
           git pull origin Auto-build
           if [ -d "Auto-build-Plugin" ]; then
             zip -r Auto-build-backup.zip ./Auto-build-Plugin -x *.git*
+          else
+            touch Process ended >> nobuildbackup.txt
           fi
 
       - name: Commit files
