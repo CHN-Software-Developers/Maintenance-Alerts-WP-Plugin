@@ -14,11 +14,8 @@ jobs:
         if [ -d "Auto-Backup" ]; then
           rm -r Auto-Backup
         fi
-        mkdir Auto-Backup
-        cp -r . Auto-Backup
-        cd Auto-Backup
-        rm .git
         zip -r backup.zip .
+        mkdir Auto-Backup
         cp -r backup.zip Auto-Backup
         rm backup.zip
         
