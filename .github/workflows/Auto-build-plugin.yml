@@ -25,7 +25,7 @@ jobs:
         git config --local user.name "Himashana"
         git add --all
         git commit -m "Auto-build"
-        git config pull.rebase true
+        git config pull.rebase false
         git pull origin Auto-build
       shell: bash
       
