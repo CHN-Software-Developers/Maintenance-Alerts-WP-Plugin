@@ -14,7 +14,7 @@ jobs:
         if [ -d "Auto-Backup" ]; then
           rm -r Auto-Backup
         fi
-        zip -r backup.zip .
+        zip -r backup.zip . -x *.git*
         mkdir Auto-Backup
         cp -r backup.zip Auto-Backup
         rm backup.zip
@@ -42,7 +42,7 @@ jobs:
         run: |
           git checkout Auto-build
           if [ -d "Auto-build-Plugin" ]; then
-            zip -r Auto-build-backup.zip ./Auto-build-Plugin
+            zip -r Auto-build-backup.zip ./Auto-build-Plugin -x *.git*
           fi
 
       - name: Commit files
@@ -79,7 +79,7 @@ jobs:
         cp -r src Auto-build-Plugin
         cd Auto-build-Plugin
         mv src maintenance-alerts
-        zip -r maintenance-alerts.zip .
+        zip -r maintenance-alerts.zip . -x *.git*
         
     - name: Commit files
       run: |
