@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        git status
+        git checkout -b Auto-build
         if [ -d "Auto-Backup" ]; then
           rm -r Auto-Backup
         fi
