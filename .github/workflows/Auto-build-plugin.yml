@@ -25,16 +25,13 @@ jobs:
         git config --local user.name "Himashana"
         git add --all
         git commit -m "Auto-build"
-        git push origin Auto-build
       shell: bash
       
-#     - name: Push to GitHub repo
-#       run: |
-#         git push origin Auto-build
-#       shell: bash
-#       uses: ad-m/github-push-action@master
-#       with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push to GitHub repo
+      uses: ad-m/github-push-action@master
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         branch: Auto-build
 
   backup-old-build:
       runs-on: ubuntu-latest
