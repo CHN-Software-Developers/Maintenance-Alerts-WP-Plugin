@@ -1,5 +1,7 @@
 # Maintenance-Alerts-WP-Plugin
 
+[![Auto-build-plugin](https://github.com/Himashana/Maintenance-Alerts-WP-Plugin/actions/workflows/Auto-build-plugin.yml/badge.svg)](https://github.com/Himashana/Maintenance-Alerts-WP-Plugin/actions/workflows/Auto-build-plugin.yml)
+
 ## Description
 This plugin shows the website maintenance scheduled information to the visitors on the top of the website. WordPress site administrator can create a top bar alert with the scheduled maintenance date and time and enable to show the alert on the top of the site.
 
