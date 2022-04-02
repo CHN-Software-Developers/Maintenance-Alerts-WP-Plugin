@@ -23,6 +23,7 @@ jobs:
       run: |
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
+        git pull origin Auto-build
         git add --all
         git commit -m "Auto-build"
       shell: bash
