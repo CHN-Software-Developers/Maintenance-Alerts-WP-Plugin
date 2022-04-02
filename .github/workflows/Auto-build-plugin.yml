@@ -1,0 +1,91 @@
+name: Auto-build-plugin
+on:
+  push:
+    branches:
+      - main
+jobs:
+  full-backup:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: zip the code
+      run: |
+        if [ -d "Auto-Backup" ]; then
+          rm -r Auto-Backup
+        fi
+        mkdir Auto-Backup
+        zip -r backup.zip .
+        cp -r backup.zip Auto-Backup
+        rm backup.zip
+        
+    - name: Commit files
+      run: |
+        git config --local user.email "himashanasuraweera5@gmail.com"
+        git config --local user.name "Himashana"
+        git add --all
+        git commit -m "Auto-build"
+      shell: bash
+      
+    - name: Push to GitHub repo
+      uses: ad-m/github-push-action@master
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  backup-old-build:
+      runs-on: ubuntu-latest
+      needs: [full-backup]
+      steps:
+      - uses: actions/checkout@v1
+      - name: zip the code
+        run: |
+          if [ -d "Auto-build-Plugin" ]; then
+            zip -r Auto-build-backup.zip ./Auto-build-Plugin
+          fi
+
+      - name: Commit files
+        run: |
+          git config --local user.email "himashanasuraweera5@gmail.com"
+          git config --local user.name "Himashana"
+          git pull origin main
+          git add --all
+          git commit -m "Auto-build"
+        shell: bash
+
+      - name: Push to GitHub repo
+        uses: ad-m/github-push-action@master
+        with:
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [full-backup, backup-old-build]
+    steps:
+    - uses: actions/checkout@v1
+    - name: zip the code
+      run: |
+        git pull origin main
+        if [ -d "Auto-build-Plugin" ]; then
+          rm -r Auto-build-Plugin
+          cp -r Auto-build-backup.zip Auto-Backup
+          rm Auto-build-backup.zip
+        fi
+        
+        mkdir Auto-build-Plugin
+        cp -r src Auto-build-Plugin
+        cd Auto-build-Plugin
+        mv src maintenance-alerts
+        zip -r maintenance-alerts.zip .
+        
+    - name: Commit files
+      run: |
+        git config --local user.email "himashanasuraweera5@gmail.com"
+        git config --local user.name "Himashana"
+        git pull origin main
+        git add --all
+        git commit -m "Auto-build"
+      shell: bash
+      
+    - name: Push to GitHub repo
+      uses: ad-m/github-push-action@master
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
