@@ -44,11 +44,10 @@ jobs:
         run: |
           git checkout Auto-build
           git pull origin Auto-build
+          echo Process ended > nobuildbackup.txt
           if [ -d "Auto-build-Plugin" ]; then
             zip -r Auto-build-backup.zip ./Auto-build-Plugin -x *.git*
             rm  nobuildbackup.txt
-          else
-            echo Process ended > nobuildbackup.txt
           fi
 
       - name: Commit files
