@@ -10,7 +10,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        git checkout -b Auto-build
+        git config --local user.email "himashanasuraweera5@gmail.com"
+        git config --local user.name "Himashana"
+        git checkout Auto-build
+        git config pull.rebase false
+        git pull origin main
         if [ -d "Auto-Backup" ]; then
           rm -r Auto-Backup
         fi
@@ -21,8 +25,6 @@ jobs:
         
     - name: Commit files
       run: |
-        git config --local user.email "himashanasuraweera5@gmail.com"
-        git config --local user.name "Himashana"
         git add --all
         git commit -m "Auto-build"
       shell: bash
@@ -41,15 +43,19 @@ jobs:
       - name: zip the code
         run: |
           git checkout Auto-build
+          git pull origin Auto-build
           if [ -d "Auto-build-Plugin" ]; then
             zip -r Auto-build-backup.zip ./Auto-build-Plugin -x *.git*
+            rm  nobuildbackup.txt
+          else
+            echo Process ended > nobuildbackup.txt
           fi
 
       - name: Commit files
         run: |
           git config --local user.email "himashanasuraweera5@gmail.com"
           git config --local user.name "Himashana"
-          git pull origin main
+          git pull origin Auto-build
           git add --all
           git commit -m "Auto-build"
         shell: bash
@@ -67,8 +73,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: zip the code
       run: |
-        git pull origin main
         git checkout Auto-build
+        git pull origin Auto-build
         if [ -d "Auto-build-Plugin" ]; then
           rm -r Auto-build-Plugin
           cp -r Auto-build-backup.zip Auto-Backup
@@ -85,7 +91,7 @@ jobs:
       run: |
         git config --local user.email "himashanasuraweera5@gmail.com"
         git config --local user.name "Himashana"
-        git pull origin main
+        git pull origin Auto-build
         git add --all
         git commit -m "Auto-build"
       shell: bash
