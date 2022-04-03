@@ -11,6 +11,7 @@ jobs:
     - name: zip the code
       run: |
         git checkout Auto-build
+        git config pull.rebase false
         git pull origin main
         if [ -d "Auto-Backup" ]; then
           rm -r Auto-Backup
