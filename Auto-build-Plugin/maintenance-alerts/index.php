@@ -3,7 +3,7 @@
  * Plugin Name:       Maintenance alerts
  * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
  * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
- * Version:           1.1.3
+ * Version:           1.1.4
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Himashana
@@ -50,6 +50,14 @@
  add_action("wp_body_open", "add_alert");
  
  function add_alert(){
+	 
+	 if(get_option('Maintenance_mode_action') == "enable --maintenance"){
+		 wp_enqueue_style( 'maintenance_screen', '/wp-content/plugins/maintenance-alerts/maintenance_screen.css',false,'1.1','all');
+	 
+		 ?> <a href="<?php echo get_option('Onclick_event'); ?>" style="text-decoration:none;"><div style="position:fixed; z-index:10000; width:100%; height:2000px; overflow:hidden; color:<?php echo get_option('textcolor'); ?>; background-color:<?php echo get_option('backgroundcolor'); ?>; padding:<?php echo get_option('alertPadding'); ?>px;"><center><h4 style="font-size:<?php echo get_option('fontSize'); ?>px; color:<?php echo get_option('textcolor'); ?>;"> <?php echo'This site will be unavailable on Wednesday, 26 January 2022 from 6.30AM to 12.00PM due to planned maintenance.'; ?> </h4></center></div></a> <?php
+	 }
+	 
+		 
 	 //If the user select 'Enabled', a maintenance alert will display on the top of the website.
 	 if(get_option('Action_select') == "Enabled"){
 		 //If the header text is empty, it will show the default text.
@@ -70,6 +78,7 @@
 	 register_setting('option_group', 'fontSize');
 	 register_setting('option_group', 'alertPadding');
 	 register_setting('option_group', 'Onclick_event');
+	 register_setting('option_group', 'Maintenance_mode_action');
 	 register_setting('Activation_option_group', 'pro_activate');
 	 register_setting('configure_advanced_settings', 'configuration_id');
  }
@@ -209,6 +218,14 @@
 					 <label for="Onclick_event">On click :</label>
 					 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
 					 
+					 <!-- Maintenance mode -->
+					 <br><br><h3>Maintenance mode</h3><hr><br>
+					 
+					 <label for="Maintenance_mode_action">Enter "enable --maintenance" to enable maintenance screen <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label></label>
+					 <input type="text" id="Maintenance_mode_action" name="Maintenance_mode_action" value="<?php
+						 echo get_option('Maintenance_mode_action');
+					 ?>">
+					 
 					 <!-- Error messages -->
 					 <br><p style="color:red;"><?php echo $Message_text_color ?></p>
 					 <p style="color:red;"><?php echo $Message_background_color ?></p>
@@ -300,7 +317,7 @@
 			 <br>
 			 * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
 			 <br>
-			 * Version:           1.1.3
+			 * Version:           1.1.4
 			 <br>
 			 * Requires at least: 5.2
 			 <br>
@@ -318,6 +335,7 @@
 			 <br>
 			 * Domain Path:       /languages
 		</div>
+		
 	 <?php
 		 
  }
