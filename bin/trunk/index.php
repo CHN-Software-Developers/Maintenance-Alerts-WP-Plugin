@@ -1,17 +1,19 @@
 <?php
 	/**
- * Plugin Name:       Maintenance alerts
- * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
- * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
- * Version:           1.1.3
- * Requires at least: 5.2
- * Requires PHP:      7.2
- * Author:            Himashana
- * Author URI:        https://chnsoftwaredevelopers.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       Maintenance_alerts
- * Domain Path:       /languages
+	 * Plugin Name:       Maintenance alerts
+	 * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
+	 * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
+	 * Version:           1.2.0
+	 * Requires at least: 5.2
+	 * Requires PHP:      7.2
+	 * Author:            Himashana
+	 * Author URI:        https://chnsoftwaredevelopers.com/
+	 * License:           GPL v2 or later
+	 * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+	 * Text Domain:       Maintenance_alerts
+	 * Domain Path:       /languages
+	 * 
+	 *
  */
  
  /*
@@ -32,8 +34,46 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
- 
- 
+//Configure Maintenance alert page template.
+function maintenance_alert_template_array(){
+	//Maintenance alert template array
+	$ma_templates = [];
+
+	//Maintenance alert template - blank
+	$ma_templates['Maintenance-Alerts-pt.php'] = 'Maintenance Alerts(blank)';
+
+	//Return all the templates
+	return $ma_templates;
+}
+
+function maintenance_alert_template_register($page_templates,$theme,$post){
+	$plugin_templates = maintenance_alert_template_array();
+
+	foreach($plugin_templates as $templkey=>$templval){
+		$p_templates[$templkey] = $templval;
+	}
+
+	return $p_templates;
+}
+
+add_filter('theme_page_templates', 'maintenance_alert_template_register', 10, 3);
+
+function maintenance_alert_template_select($template){
+	global $post, $wp_query, $wpdb;
+
+	$maintenance_alert_template_slug = get_page_template_slug($post->ID);
+	$plugin_templates = maintenance_alert_template_array();
+
+	if(isset($plugin_templates[$maintenance_alert_template_slug])){
+		$template = plugin_dir_path(__FILE__).'templates/'.$maintenance_alert_template_slug;
+	}
+
+	return $template;
+}
+
+add_filter('template_include', 'maintenance_alert_template_select', 99);
+
+
  //Create the menu
  add_action("admin_menu", "addMenu");
  function addMenu(){
@@ -43,13 +83,16 @@
  }
  
  
-
- 
- 
  //Display Maintenance Alert
  add_action("wp_body_open", "add_alert");
  
  function add_alert(){
+	 //Setup maintenance mode
+	 if(get_option('Maintenance_mode_action') == "enable --maintenance"){
+		include_once dirname( __FILE__ ) . '\maintenance_mode.php';
+	}
+	 
+		 
 	 //If the user select 'Enabled', a maintenance alert will display on the top of the website.
 	 if(get_option('Action_select') == "Enabled"){
 		 //If the header text is empty, it will show the default text.
@@ -70,6 +113,7 @@
 	 register_setting('option_group', 'fontSize');
 	 register_setting('option_group', 'alertPadding');
 	 register_setting('option_group', 'Onclick_event');
+	 register_setting('option_group', 'Maintenance_mode_action');
 	 register_setting('Activation_option_group', 'pro_activate');
 	 register_setting('configure_advanced_settings', 'configuration_id');
  }
@@ -209,6 +253,14 @@
 					 <label for="Onclick_event">On click :</label>
 					 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
 					 
+					 <!-- Maintenance mode -->
+					 <br><br><h3>Maintenance mode</h3><hr><br>
+					 
+					 <label for="Maintenance_mode_action">Enter "enable --maintenance" to enable maintenance screen <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label></label>
+					 <input type="text" id="Maintenance_mode_action" name="Maintenance_mode_action" value="<?php
+						 echo get_option('Maintenance_mode_action');
+					 ?>">
+					 
 					 <!-- Error messages -->
 					 <br><p style="color:red;"><?php echo $Message_text_color ?></p>
 					 <p style="color:red;"><?php echo $Message_background_color ?></p>
@@ -255,69 +307,11 @@
  }
  
  //Theme Compatibility
- 
  function MaintenanceAlertsMenuCompatibility(){
-	 echo'<h1>Maintenance Alerts - Compatibility check</h1>';
-	 echo'<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">';
-	 $my_theme = wp_get_theme();
-	 echo 'Theme you are using : ' . $my_theme->get( 'Name' ).'<br>';
-	 echo 'Theme version : ' . $my_theme->get( 'Version' ).'<br>';
-	 echo'<h2>Compatibility</h2>';
-	 if($my_theme == "Astra"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:100%; background-color:green; height:20px;"></div></div>';
-	 }elseif($my_theme == "Kadence"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:92%; background-color:green; height:20px;"></div></div>';
-	 }elseif($my_theme == "OceanWP"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:87%; background-color:green; height:20px;"></div></div>';
-	 }elseif($my_theme == "Twenty Twenty-One"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:100%; background-color:green; height:20px;"></div></div>';
-	 }elseif($my_theme == "Twenty Twenty"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:62%; background-color:orange; height:20px;"></div></div>';
-	 }elseif($my_theme == "Twenty Nineteen"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:82%; background-color:green; height:20px;"></div></div>';
-	 }elseif($my_theme == "Twenty Seventeen"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:1%; background-color:red; height:20px;"></div></div>';
-		 echo'<p style="color:red;">This plugin is not compatible with the theme you are currently using.</p>';
-	 }elseif($my_theme == "Twenty Sixteen"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:3%; background-color:red; height:20px;"></div></div>';
-	 }elseif($my_theme == "Twenty Twenty-Two"){
-		 echo'<div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:96%; background-color:green; height:20px;"></div></div>';
-	 }else{
-		 echo'<p style="color:red;">This plugin is not tested with the theme you are currently using. But it may be working.</p>';
-	 }
-	 
-	 echo'<br></div>';
+	 include_once dirname( __FILE__ ) . '\compatibility_check.php';
  }
  
  //About the plugin
   function MaintenanceAlertsMenuAbout(){
-	 echo'<h1>Maintenance Alerts - About</h1>';
-	 ?>
-	  	<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
-			 * Plugin Name:       Maintenance alerts
-			 <br>
-			 * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
-			 <br>
-			 * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
-			 <br>
-			 * Version:           1.1.3
-			 <br>
-			 * Requires at least: 5.2
-			 <br>
-			 * Requires PHP:      7.2
-			 <br>
-			 * Author:            Himashana
-			 <br>
-			 * Author URI:        https://chnsoftwaredevelopers.com/
-			 <br>
-			 * License:           GPL v2 or later
-			 <br>
-			 * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
-			 <br>
-			 * Text Domain:       Maintenance_alerts
-			 <br>
-			 * Domain Path:       /languages
-		</div>
-	 <?php
-		 
+	include_once dirname( __FILE__ ) . '\about.php';
  }

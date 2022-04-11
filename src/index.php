@@ -145,8 +145,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					 <?php settings_errors(); ?>
 					 <?php settings_fields('Activation_option_group'); ?>
 					 <h3>Product activation</h3>
-					 <input type="email" name="pro_activate" placeholder="Enter your Email">
-				 	<?php submit_button('Activate'); ?>
+					 <input type="email" name="pro_activate" value="<?php echo get_option('admin_email') ?>" placeholder="Enter your Email" style="width:30%;" disabled>
+				 	<?php submit_button('Activate plugin'); ?>
 		 		</form>
 			<?php	 
 			 }

@@ -9,7 +9,14 @@ copy assets bin\assets
 cd bin
 mkdir trunk
 cd ..
+
 copy src bin\trunk
+
+cd bin\trunk
+mkdir templates
+cd ..
+cd ..
+copy src\templates bin\trunk\templates
 
 echo -------------------------------
 echo Plugin built successfully.
