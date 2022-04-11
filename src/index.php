@@ -314,4 +314,4 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  //About the plugin
   function MaintenanceAlertsMenuAbout(){
 	include_once dirname( __FILE__ ) . '\about.php';
- }
+  }
