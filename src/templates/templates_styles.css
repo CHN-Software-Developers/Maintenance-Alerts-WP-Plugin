@@ -17,6 +17,14 @@
 */
 
 body{
-	overflow-y: hidden;
-    overflow-x: hidden;
+    background-color: #E2E7EC;
+}
+table, th, td {
+    border: 1px solid;
+    padding: 5px;
+    border-collapse: collapse;
+  }
+
+#ma-page-title{
+    color:white;
 }
