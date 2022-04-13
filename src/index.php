@@ -124,7 +124,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 register_setting('option_group', 'alertPadding');
 	 register_setting('option_group', 'Onclick_event');
 	 register_setting('option_group', 'Force_maintenance_when_loggedin');
-	 register_setting('option_group', 'Maintenance_mode_action');
+	 register_setting('option_group', 'custom_maintenance_pages');
 	 register_setting('Activation_option_group', 'pro_activate');
 	 register_setting('configure_advanced_settings', 'configuration_id');
  }
@@ -324,15 +324,23 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 							 </select>
 							  <?php 
 						 }
-					 ?>
 
-					 <!-- Maintenance mode -->
-					 <br><br><h3>Maintenance mode</h3><hr><br>
-					 
-					 <label for="Maintenance_mode_action">Enter "enable --maintenance" to enable maintenance screen <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label></label>
-					 <input type="text" id="Maintenance_mode_action" name="Maintenance_mode_action" value="<?php
-						 echo get_option('Maintenance_mode_action');
-					 ?>">
+						 //Maintenance mode advanced settings
+						 if(get_option('Maintenance_type') == "Maintenance_Mode"){
+							 ?>
+								<br><br><h3>Advanced settings</h3><hr><br>
+
+								<!-- Custom page-->	
+								<div class="notice notice-warning is-dismissible">
+									<p>Please note that the following settings will disable the general settings because you can set up these settings on the custom page.</p>
+						 		</div>							
+								 <label>Display custom page <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
+								<input type="text" id="custom_maintenance_pages" name="custom_maintenance_pages" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
+									echo get_option('custom_maintenance_pages');
+								?>">
+							 <?php
+						 } 
+					 ?>
 					 
 					 <!-- Error messages -->
 					 <br><p style="color:red;"><?php echo $Message_text_color ?></p>
