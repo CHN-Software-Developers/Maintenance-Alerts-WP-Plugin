@@ -326,7 +326,6 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 						 }
 					 ?>
 
-
 					 <!-- Maintenance mode -->
 					 <br><br><h3>Maintenance mode</h3><hr><br>
 					 
@@ -370,7 +369,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					 <input type="text" value="<?php echo $configuration_success_id ?>" style="display:none;" name="configuration_id" placeholder="none">
 				 	<?php submit_button('Configure advanced settings'); ?>
 		 		</form>
-			<?php
+				<?php
 			 }
 		    ?>
 	 </div>
