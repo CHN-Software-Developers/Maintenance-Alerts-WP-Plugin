@@ -78,6 +78,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  add_action("admin_menu", "addMenu");
  function addMenu(){
 	 add_menu_page( "Maintenance alerts", "Maintenance alerts", 4, "Maintenance-Alerts", "MaintenanceAlertsMenu", "dashicons-warning", 25);
+	 add_submenu_page( "Maintenance-Alerts", "Configuration", "Configuration", 4, "Maintenance-Alerts-Configuration", "MaintenanceAlertsMenuConfiguration");
 	 add_submenu_page( "Maintenance-Alerts", "Compatibility", "Compatibility", 4, "Maintenance-Alerts-Compatibility", "MaintenanceAlertsMenuCompatibility");
 	 add_submenu_page( "Maintenance-Alerts", "About", "About", 4, "Maintenance-Alerts-About", "MaintenanceAlertsMenuAbout");	 
  }
@@ -127,6 +128,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 register_setting('option_group', 'custom_maintenance_page');
 	 register_setting('Activation_option_group', 'pro_activate');
 	 register_setting('configure_advanced_settings', 'configuration_id');
+	 register_setting('configuration', 'current_configuration');
+	 register_setting('configuration', 'config_restore_sequence');
  }
  
  add_action('admin_init', 'alert_register_settings');
@@ -349,13 +352,13 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 								<!-- Custom page-->	
 								<div class="notice notice-warning is-dismissible">
-								<p>
+								<b><p>
 										Please note that the following settings will disable the general settings because you can set up these settings on the custom page.<br>
 										Please remove '/' before '?' when you enter the page URL.<br>
 										E.g. <br>
 										http://mydomain.com/Maintenance-Alerts/wordpress?page_id=13 (Correct)<br>
 										http://mydomain.com/Maintenance-Alerts/wordpress/?page_id=13 (Incorrect)
-								</p>
+								</p></b>
 						 		</div>							
 								 <label>Display custom page <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
 								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
@@ -415,6 +418,11 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 include_once dirname( __FILE__ ) . '\compatibility_check.php';
  }
  
+ //Plugin configuration(export/import)
+ function MaintenanceAlertsMenuConfiguration(){
+	include_once dirname( __FILE__ ) . '\Configuration.php';
+}
+
  //About the plugin
   function MaintenanceAlertsMenuAbout(){
 	echo'<h1>Maintenance Alerts - About</h1>';
