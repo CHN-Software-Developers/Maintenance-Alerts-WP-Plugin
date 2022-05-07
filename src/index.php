@@ -151,40 +151,41 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	<?php settings_errors(); ?>
 	 <!--Free Product activation-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
-	 
 		 <?php
-		 	function key_validate(){
-				$alg = "6Hn60vfkd" . "2" . "N" . "469644965";
-				$alg = $alg . strval(2795597759 * 245);
-				return sha1($alg);
-			 }
-
-			 if(get_option('pro_activate') == key_validate()){
+			 if(get_option('pro_activate') != ""){
 				?>
 					<div class="notice notice-success is-dismissible">
-						<h3>Product activated</h3>
+						<h3>Plugin connected to : <?php echo get_option('pro_activate'); ?> (CHN Account)</h3>
 						<form method="post" action="options.php">
 							<?php settings_fields('Activation_option_group'); ?>
-							<input type="text" name="pro_activate" value="" placeholder="Enter your product key" style="width:30%; display:none;">
-							<?php submit_button('Deactivate product'); ?>
+							<input type="text" name="pro_activate" value="" style="width:30%; display:none;">
+							<?php submit_button('Disconnect account'); ?>
 						</form>
 					</div>
 				<?php
 			 }else{
 				 ?>
+				 
 				 <div class="notice notice-warning is-dismissible">
-				 <form method="post" action="options.php">
-					 <?php settings_fields('Activation_option_group'); ?>
-					 <h3>Product activation</h3>
-					 <?php echo 'Email : '. get_option('admin_email') ?>
-					 <br><input type="text" name="pro_activate" placeholder="Enter your product key" style="width:30%;">
 					 <?php
-					 	if(get_option('pro_activate') != ""){
-							 echo'<p style="color:red;">Please enter a valid product key.</p>';
-						 }
-					 	submit_button('Activate product');
-					 ?>
-		 		</form>
+						if($_GET['maintenance_alerts_action'] == "runregistration" && isset($_GET['CHNACCOUNTEMAIL'])){
+					 		?>
+							<form method="post" action="options.php">
+								<?php settings_fields('Activation_option_group'); ?>
+								<br>CHN Account belongs to <?php echo $_GET['CHNACCOUNTEMAIL']; ?><input type="text" name="pro_activate" value="<?php echo $_GET['CHNACCOUNTEMAIL']; ?>" style="width:30%; display:none;">
+								<?php
+									submit_button('Connect account');
+								?>
+							</form>
+							<?php
+						}else{
+							?>
+							<p>Connect your CHN account to get new information and updates.</p>
+				 			<a href="https://chnsoftwaredevelopers.com/v2.0/login/?action=registerplugin&productname=maintenance-alerts&callback_url=<?php echo home_url() ?>&string=58306835u483380220482"><button>Connect my CHN Account</button></a><br>
+							<br>
+							<?php
+						}
+						?>		
 				</div>
 			<?php	 
 			 }
@@ -408,7 +409,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		    ?>
 	 </div>
 	 <!--Show new informations about the plugin.-->
-	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php" width="500px" height="200px"></div>
+	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php" width="500px" height="200px"></div>
 	 <?php
 	 
  }
