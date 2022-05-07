@@ -78,6 +78,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  add_action("admin_menu", "addMenu");
  function addMenu(){
 	 add_menu_page( "Maintenance alerts", "Maintenance alerts", 4, "Maintenance-Alerts", "MaintenanceAlertsMenu", "dashicons-warning", 25);
+	 add_submenu_page( "Maintenance-Alerts", "Configuration", "Configuration", 4, "Maintenance-Alerts-Configuration", "MaintenanceAlertsMenuConfiguration");
 	 add_submenu_page( "Maintenance-Alerts", "Compatibility", "Compatibility", 4, "Maintenance-Alerts-Compatibility", "MaintenanceAlertsMenuCompatibility");
 	 add_submenu_page( "Maintenance-Alerts", "About", "About", 4, "Maintenance-Alerts-About", "MaintenanceAlertsMenuAbout");	 
  }
@@ -124,9 +125,11 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 register_setting('option_group', 'alertPadding');
 	 register_setting('option_group', 'Onclick_event');
 	 register_setting('option_group', 'Force_maintenance_when_loggedin');
-	 register_setting('option_group', 'custom_maintenance_pages');
+	 register_setting('option_group', 'custom_maintenance_page');
 	 register_setting('Activation_option_group', 'pro_activate');
 	 register_setting('configure_advanced_settings', 'configuration_id');
+	 register_setting('configuration', 'current_configuration');
+	 register_setting('configuration', 'config_restore_sequence');
  }
  
  add_action('admin_init', 'alert_register_settings');
@@ -150,10 +153,21 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 	 
 		 <?php
-			 if(get_option('pro_activate') <> ""){
+		 	function key_validate(){
+				$alg = "6Hn60vfkd" . "2" . "N" . "469644965";
+				$alg = $alg . strval(2795597759 * 245);
+				return sha1($alg);
+			 }
+
+			 if(get_option('pro_activate') == key_validate()){
 				?>
 					<div class="notice notice-success is-dismissible">
 						<h3>Product activated</h3>
+						<form method="post" action="options.php">
+							<?php settings_fields('Activation_option_group'); ?>
+							<input type="text" name="pro_activate" value="" placeholder="Enter your product key" style="width:30%; display:none;">
+							<?php submit_button('Deactivate product'); ?>
+						</form>
 					</div>
 				<?php
 			 }else{
@@ -162,8 +176,14 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 <form method="post" action="options.php">
 					 <?php settings_fields('Activation_option_group'); ?>
 					 <h3>Product activation</h3>
-					 <input type="email" name="pro_activate" value="<?php echo get_option('admin_email') ?>" placeholder="Enter your Email" style="width:30%;" disabled>
-				 	<?php submit_button('Activate plugin'); ?>
+					 <?php echo 'Email : '. get_option('admin_email') ?>
+					 <br><input type="text" name="pro_activate" placeholder="Enter your product key" style="width:30%;">
+					 <?php
+					 	if(get_option('pro_activate') != ""){
+							 echo'<p style="color:red;">Please enter a valid product key.</p>';
+						 }
+					 	submit_button('Activate product');
+					 ?>
 		 		</form>
 				</div>
 			<?php	 
@@ -332,11 +352,17 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 								<!-- Custom page-->	
 								<div class="notice notice-warning is-dismissible">
-									<p>Please note that the following settings will disable the general settings because you can set up these settings on the custom page.</p>
+								<b><p>
+										Please note that the following settings will disable the general settings because you can set up these settings on the custom page.<br>
+										Please remove '/' before '?' when you enter the page URL.<br>
+										E.g. <br>
+										http://mydomain.com/Maintenance-Alerts/wordpress?page_id=13 (Correct)<br>
+										http://mydomain.com/Maintenance-Alerts/wordpress/?page_id=13 (Incorrect)
+								</p></b>
 						 		</div>							
 								 <label>Display custom page <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
-								<input type="text" id="custom_maintenance_pages" name="custom_maintenance_pages" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
-									echo get_option('custom_maintenance_pages');
+								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
+									echo get_option('custom_maintenance_page');
 								?>">
 							 <?php
 						 } 
@@ -392,6 +418,11 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 include_once dirname( __FILE__ ) . '\compatibility_check.php';
  }
  
+ //Plugin configuration(export/import)
+ function MaintenanceAlertsMenuConfiguration(){
+	include_once dirname( __FILE__ ) . '\Configuration.php';
+}
+
  //About the plugin
   function MaintenanceAlertsMenuAbout(){
 	echo'<h1>Maintenance Alerts - About</h1>';
