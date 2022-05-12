@@ -149,7 +149,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	
 	<h1>Maintenance Alerts</h1><br>
 	<?php settings_errors(); ?>
-	 <!--Free Product activation-->
+	 <!--Connect CHN Account-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
 			 if(get_option('pro_activate') != ""){
