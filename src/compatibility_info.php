@@ -20,10 +20,25 @@
     $progress = 1;
     $color = "red";
     $message = "";
+    $auto_config_text = "";
 
     //Setup theme compatibility details
     if($my_theme == "Astra"){
         $progress = 100;
+        $auto_config_text = "{beginconfig ==05/21/2022 10:24:29 am ==}
+        {||textcolor(option_group)||
+        #FFFFFF
+        ||textcolor(option_group)||}
+        {||backgroundcolor(option_group)||
+        #E39C19
+        ||backgroundcolor(option_group)||}
+        {||fontSize(option_group)||
+        20
+        ||fontSize(option_group)||}
+        {||alertPadding(option_group)||
+        15
+        ||alertPadding(option_group)||}
+        {endconfig}";
     }elseif($my_theme == "Kadence"){
         $progress = 92;
     }elseif($my_theme == "OceanWP"){

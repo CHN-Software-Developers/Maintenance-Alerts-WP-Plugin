@@ -39,15 +39,12 @@
 
     ?>
 
-        <h1>Maintenance Alerts - Configuration</h1>';
+        <h1>Maintenance Alerts - Configuration</h1>
         
         <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
-            
-            
-
-            <h2></h2>
+            <?php if($_GET['maintenance_alerts_action'] != "auto-config"){ ?>
             <!-- Get and display the current configuration to the user according to a format -->
-            <h2>Export configuration</h2>
+            <h3>Export configuration</h3>
 
             <div class="notice notice-warning is-dismissible">
                 <br><b><p>You can save the following configuration text in a text file for later use or transfer it to a new website.</p></b><br>
@@ -64,10 +61,12 @@
                     echo "<div style=color:blue;>{endconfig}</div><br>";
                 ?>
             </div>
+            <?php } ?>
 
             <!-- Import custom configuration formatted text -->
-            <h2>Import configuration</h2>
+            <h3>Import configuration</h3>
             <div style="background-color:#E2E7EC; width:700px; padding:10px; border:4px solid gray;" disabled>
+            <?php if($_GET['maintenance_alerts_action'] != "auto-config"){ ?>
             <form method="post" action="options.php">
                 <?php settings_fields('configuration'); ?>
                 <?php
@@ -76,13 +75,15 @@
                     submit_button('Import');
                 ?>
             </form>
-
+            <?php }elseif($_GET['maintenance_alerts_action'] == "auto-config" && get_option('current_configuration') == ""){
+                echo '<p>Auto-config process completed.</p>';
+            } ?>
             <?php
                 // If imported configuration exists then, display for the user to restore it.
                 if(get_option('current_configuration') != ""){
                     ?>
                     
-                    <h2>Restore imported configuration</h2>
+                    <h3>Restore imported configuration</h3>
                     <?php 
 
                         //Read and replace settings

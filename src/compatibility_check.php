@@ -25,13 +25,29 @@
     $my_theme = wp_get_theme();
     echo 'Theme you are using : ' . $my_theme->get( 'Name' ).'<br>';
     echo 'Theme version : ' . $my_theme->get( 'Version' ).'<br>';
-    echo'<h2>Compatibility</h2>';
+    echo'<h3>Compatibility</h3>';
 
     include_once dirname( __FILE__ ) . '\compatibility_info.php';
     
     ?>
     <div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:<?php echo $progress ?>%; background-color:<?php echo $color ?>; height:20px;"></div></div>';
     <br><p style="color:<?php echo $color ?>;"><?php echo $message ?></p>
-    <?php
 
+    <?php if($auto_config_text){ ?>
+        <form method="post" action="options.php">
+            <?php settings_fields('configuration'); ?>
+            <?php
+                echo'<input type="text" name="current_configuration" placeholder="Enter the formatted configuration text here." value="'.$auto_config_text.'" class="large-text" style="display:none;">';
+                echo'<input type="text" name="config_restore_sequence" value="0" class="large-text" style="display:none;">';
+                submit_button('Run auto-config');
+            ?>
+        </form>
+        <div class="notice notice-warning">
+            <p>Once you run the auto-config, restore the settings from here. Please note that this process will reset all of the settings you applied previously.</p>
+            <a href="admin.php?page=Maintenance-Alerts-Configuration&maintenance_alerts_action=auto-config"><button>Restore settings</button></a><br><br>
+        </div>
+        <?php
+    }else{
+        echo'<br><p style="color:red;">Auto-config not supported!</p>';
+    }
     echo'<br></div>';
