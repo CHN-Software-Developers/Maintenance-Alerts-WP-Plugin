@@ -126,10 +126,12 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 register_setting('option_group', 'Onclick_event');
 	 register_setting('option_group', 'Force_maintenance_when_loggedin');
 	 register_setting('option_group', 'custom_maintenance_page');
-	 register_setting('Activation_option_group', 'pro_activate');
+	 register_setting('Activation_option_group', 'CHN_Account_User');
 	 register_setting('configure_advanced_settings', 'configuration_id');
 	 register_setting('configuration', 'current_configuration');
 	 register_setting('configuration', 'config_restore_sequence');
+	 register_setting('Agreement', 'is_License_accepted');
+	 register_setting('Agreement', 'is_terms_and_conditions_accepted');
  }
  
  add_action('admin_init', 'alert_register_settings');
@@ -142,23 +144,77 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 $Message_font_size = "";
 	 $Message_alert_padding = "";
 	 //The configuration_id change from version to version.
- 	 $configuration_id_old_version = "config_0001"; // old version id
- 	 $configuration_id_new_version = "config_0002"; // new version id
- 	 $configuration_success_id = "config_0002_done";// configuration success identification id
+ 	 $configuration_id_old_version = "config_0003"; // old version id
+ 	 $configuration_id_new_version = "config_0004"; // new version id
+ 	 $configuration_success_id = "config_0004_done";// configuration success identification id
+
+	// This variable use to define in which version the Terms and 
+	// Conditions and the License agreement need to display again to the user.
+	$License_agreement_and_TandC_frompluginversion = "1.2.0-dev000"
 	 ?>
 	
 	<h1>Maintenance Alerts</h1><br>
 	<?php settings_errors(); ?>
+
+	<!-- License agreement and terms and conditions -->
+	<?php
+		if(get_option('is_License_accepted') != "true".$License_agreement_and_TandC_frompluginversion && get_option('is_terms_and_conditions_accepted') != "true".$License_agreement_and_TandC_frompluginversion){
+			?>
+				<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
+					<b><h3>License agreement</h3></b>
+					<div style="width:700px; padding:3px; border:1px solid gray;">
+						You can use this plugin to show the website maintenance scheduled information to the visitors of your website.<br> 
+						Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
+						<br><br>
+						This program is free software: you can redistribute it and/or modify<br>
+						it under the terms of the GNU General Public License as published by<br>
+						the Free Software Foundation, either version 2 of the License, or<br>
+						any later version.
+						<br><br>
+						This program is distributed in the hope that it will be useful,<br>
+						but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
+						MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br>
+						GNU General Public License for more details.<br>
+						<br><br>
+						You should have received a copy of the GNU General Public License<br>
+						along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.<br>
+					</div>
+					<form method="post" action="options.php">
+						<?php settings_fields('Agreement'); ?>
+						<input type="text" name="is_License_accepted" value="true<?php echo $License_agreement_and_TandC_frompluginversion; ?>" style="width:30%; display:none;">
+						<?php submit_button('Continue'); ?>
+					</form>
+				</div>
+			<?php
+		}elseif(get_option('is_License_accepted') == "true".$License_agreement_and_TandC_frompluginversion && get_option('is_terms_and_conditions_accepted') != "true".$License_agreement_and_TandC_frompluginversion){
+			?>
+				<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
+				<b><h3>Terms and conditions</h3></b>
+					<div style="width:700px; padding:3px; border:1px solid gray;">
+					<p style="background-color:#D0F4B2; width:680px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at https://chnsoftwaredevelopers.com</p>
+					<iframe src="https://chnsoftwaredevelopers.com/Terms-And-Conditions/#fullview" style="width:100%; height:800px;"></iframe>
+					</div>
+					<br>
+					<form method="post" action="options.php">
+						<?php settings_fields('Agreement'); ?>
+						<input type="text" name="is_terms_and_conditions_accepted" value="true<?php echo $License_agreement_and_TandC_frompluginversion; ?>" style="width:30%; display:none;">
+						<?php submit_button('Continue'); ?>
+					</form>
+				</div>
+			<?php
+		}else{
+	?>
+
 	 <!--Connect CHN Account-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
-			 if(get_option('pro_activate') != ""){
+			 if(get_option('CHN_Account_User') != ""){
 				?>
 					<div class="notice notice-success is-dismissible">
-						<h3>Plugin connected to : <?php echo get_option('pro_activate'); ?> (CHN Account)</h3>
+						<h3>Plugin connected to : <?php echo get_option('CHN_Account_User'); ?> (CHN Account)</h3>
 						<form method="post" action="options.php">
 							<?php settings_fields('Activation_option_group'); ?>
-							<input type="text" name="pro_activate" value="" style="width:30%; display:none;">
+							<input type="text" name="CHN_Account_User" value="" style="width:30%; display:none;">
 							<?php submit_button('Disconnect account'); ?>
 						</form>
 					</div>
@@ -172,7 +228,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					 		?>
 							<form method="post" action="options.php">
 								<?php settings_fields('Activation_option_group'); ?>
-								<br>CHN Account belongs to <?php echo $_GET['CHNACCOUNTEMAIL']; ?><input type="text" name="pro_activate" value="<?php echo $_GET['CHNACCOUNTEMAIL']; ?>" style="width:30%; display:none;">
+								<br>CHN Account belongs to <?php echo $_GET['CHNACCOUNTEMAIL']; ?><input type="text" name="CHN_Account_User" value="<?php echo $_GET['CHNACCOUNTEMAIL']; ?>" style="width:30%; display:none;">
 								<?php
 									submit_button('Connect account');
 								?>
@@ -191,7 +247,44 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			 }
 		    ?>
 	 </div><br>
-	  
+
+	 <?php
+		if(get_option('configuration_id') == $configuration_id_new_version){
+		 //No anything to do.
+		}elseif(get_option('configuration_id') == $configuration_success_id){
+		 ?>
+		 	<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><div class="notice notice-warning">
+			 <form method="post" action="options.php">
+				 <?php settings_errors(); ?>
+				 <?php settings_fields('configure_advanced_settings'); ?>
+				 <br><br><h3>Maintenance Alerts - configuration</h3><hr><br>
+				 <input type="text" value="<?php echo $configuration_id_new_version ?>" style="display:none;" name="configuration_id" placeholder="none">
+				 <p style="color:green;">Settings configured successfully! You can go to the compatibility section to start auto-configuration with the theme you are using (if the theme is supported only).</p>
+			 	<?php submit_button('Continue...'); ?>
+			</form>
+			</div></div>
+		<?php	 
+		}else{
+		 ?>
+		 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><div class="notice notice-warning">
+		 <form method="post" action="options.php">
+			 <?php settings_errors(); ?>
+			 <?php settings_fields('configure_advanced_settings'); ?>
+			 <br><br><h3>Maintenance Alerts - configuration</h3><hr>
+			 <!--Display version updated message if the plugin is updated from old version to this version.-->
+			 <?php if(get_option('configuration_id') == $configuration_id_old_version){
+				 echo'Plugin updated successfully!';
+			 }?>
+			 <input type="text" value="<?php echo $configuration_success_id ?>" style="display:none;" name="configuration_id" placeholder="none">
+		 	<?php submit_button('Start now'); ?>
+		</form></div></div>
+		<?php
+		}
+	  ?>
+	
+	 <!-- The configuration_id change from version to version. -->
+	 <?php if(get_option('configuration_id') == $configuration_id_new_version){ ?>
+
 	 <!--Maintenance Alerts settings box-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <div style="background-color:#E2E7EC; padding-left:20px; padding-top:1px; padding-bottom:30px;">
@@ -256,100 +349,99 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			<?php
 				}
 			?>	 
-				 <!-- The configuration_id change from version to version. -->
-				 <?php if(get_option('configuration_id') == $configuration_id_new_version){ ?>
+				
 	
-					 <!-- Advance settings for alert/ General settings for maintenance mode -->
-					 <?php
-						if(get_option('Maintenance_type') == "Maintenance_Alert"){
-							echo'<br><br><h3>Advanced settings</h3><hr><br>';
-						}else{
-							echo'<br><br><h3>General settings</h3><hr><br>';
-						}
-			 		 ?>	
+				<!-- Advance settings for alert/ General settings for maintenance mode -->
+				<?php
+				if(get_option('Maintenance_type') == "Maintenance_Alert"){
+					echo'<br><br><h3>Advanced settings</h3><hr><br>';
+				}else{
+					echo'<br><br><h3>General settings</h3><hr><br>';
+				}
+			 	?>	
+				 
 					  
-					  
-					 <!-- Change text color -->
-					 <label for="textcolor">Text color : </label>
-					 <input type="text" id="textcolor" name="textcolor" value="<?php
-						 if(get_option('textcolor') <> ""){
-						 	echo get_option('textcolor'); 
-							$Message_text_color = "";
-						 }else{
-							echo '#FFFFFF';
-							$Message_text_color = "Some settings are not saved correctly!";
-						 }
-					 ?>">
+				<!-- Change text color -->
+				<label for="textcolor">Text color : </label>
+				<input type="text" id="textcolor" name="textcolor" value="<?php
+				 if(get_option('textcolor') <> ""){
+				 	echo get_option('textcolor'); 
+					$Message_text_color = "";
+				 }else{
+					echo '#FFFFFF';
+					$Message_text_color = "Some settings are not saved correctly!";
+				 }
+				?>">
+				
+				<!-- Change background color -->
+				<label for="backgroundcolor">Background color :</label>
+				<input type="text" id="backgroundcolor" name="backgroundcolor" value="<?php
+				 if(get_option('backgroundcolor') <> ""){
+				 	echo get_option('backgroundcolor'); 
+					$Message_background_color = "";
+				 }else{
+					echo '#E39C19';
+					$Message_background_color = "Some settings are not saved correctly!";
+				 }
+				?>">
+				
+				<br><br>
+				
+				<!-- Change font size -->
+				<label for="fontSize">Font size :</label>
+				<input type="text" id="fontSize" name="fontSize" value="<?php
+				 if(get_option('fontSize') <> ""){
+				 	echo get_option('fontSize'); 
+					$Message_font_size = "";
+				 }else{
+					echo '20';
+					$Message_font_size = "Some settings are not saved correctly!";
+				 }
+				?>"> px
+				
+				<br><br>
+				
+				<!-- Change padding -->
+				<label for="alertPadding">Padding :</label>
+				<input type="text" id="alertPadding" name="alertPadding" value="<?php
+				 if(get_option('alertPadding') <> ""){
+				 	echo get_option('alertPadding'); 
+					$Message_alert_padding = "";
+				 }else{
+					echo '10';
+					$Message_alert_padding = "Some settings are not saved correctly!";
+				 }
+				?>"> px
+				
+				<br><br>
 					 
-					 <!-- Change background color -->
-					 <label for="backgroundcolor">Background color :</label>
-					 <input type="text" id="backgroundcolor" name="backgroundcolor" value="<?php
-						 if(get_option('backgroundcolor') <> ""){
-						 	echo get_option('backgroundcolor'); 
-							$Message_background_color = "";
-						 }else{
-							echo '#E39C19';
-							$Message_background_color = "Some settings are not saved correctly!";
-						 }
-					 ?>">
-					 
-					 <br><br>
-					 
-					 <!-- Change font size -->
-					 <label for="fontSize">Font size :</label>
-					 <input type="text" id="fontSize" name="fontSize" value="<?php
-						 if(get_option('fontSize') <> ""){
-						 	echo get_option('fontSize'); 
-							$Message_font_size = "";
-						 }else{
-							echo '20';
-							$Message_font_size = "Some settings are not saved correctly!";
-						 }
-					 ?>"> px
-					 
-					 <br><br>
-					 
-					 <!-- Change padding -->
-					 <label for="alertPadding">Padding :</label>
-					 <input type="text" id="alertPadding" name="alertPadding" value="<?php
-						 if(get_option('alertPadding') <> ""){
-						 	echo get_option('alertPadding'); 
-							$Message_alert_padding = "";
-						 }else{
-							echo '10';
-							$Message_alert_padding = "Some settings are not saved correctly!";
-						 }
-					 ?>"> px
-					 
-					 <br><br>
-					 
-					 <!-- redirect when user click on the alert  -->
-					 <label for="Onclick_event">On click :</label>
-					 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
-					 
-					 <!-- Selection to force disable when user logged in  -->
-					 <br><br><label for="Onclick_event">Force disable when user logged in <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
-					 <?php
-						if(get_option('Force_maintenance_when_loggedin') == "Yes" || get_option('Force_maintenance_when_loggedin') == ""){
-							?>
-							<select id="Force_maintenance_when_loggedin" name="Force_maintenance_when_loggedin">
-							  <option value="Yes">Yes</option>
-							  <option value="No">No</option>
-							 </select>
-							  <?php
-						 }else{
-							?>
-							<select id="Force_maintenance_when_loggedin" name="Force_maintenance_when_loggedin">
-							  <option value="No">No</option>
-							  <option value="Yes">Yes</option>
-							 </select>
-							  <?php 
-						 }
+				 <!-- redirect when user click on the alert  -->
+				 <label for="Onclick_event">On click :</label>
+				 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
+				 
+				 <!-- Selection to force disable when user logged in  -->
+				 <br><br><label for="Onclick_event">Force disable when user logged in <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
+				 <?php
+					if(get_option('Force_maintenance_when_loggedin') == "Yes" || get_option('Force_maintenance_when_loggedin') == ""){
+						?>
+						<select id="Force_maintenance_when_loggedin" name="Force_maintenance_when_loggedin">
+						  <option value="Yes">Yes</option>
+						  <option value="No">No</option>
+						 </select>
+						  <?php
+					 }else{
+						?>
+						<select id="Force_maintenance_when_loggedin" name="Force_maintenance_when_loggedin">
+						  <option value="No">No</option>
+						  <option value="Yes">Yes</option>
+						 </select>
+						  <?php 
+					 }
 
-						 //Maintenance mode advanced settings
-						 if(get_option('Maintenance_type') == "Maintenance_Mode"){
-							 ?>
-								<br><br><h3>Advanced settings</h3><hr><br>
+					 //Maintenance mode advanced settings
+					 if(get_option('Maintenance_type') == "Maintenance_Mode"){
+						 ?>
+							<br><br><h3>Advanced settings</h3><hr><br>
 
 								<!-- Custom page-->	
 								<div class="notice notice-warning is-dismissible">
@@ -376,44 +468,16 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					 <p style="color:red;"><?php echo $Message_alert_padding ?></p>
 				 <?php submit_button(); ?>
 			 </form>
-		 <?php } ?>
-		 <?php
-			 if(get_option('configuration_id') == $configuration_id_new_version){
-				 //No anything to do.
-			 }elseif(get_option('configuration_id') == $configuration_success_id){
-				 ?>
-					 <form method="post" action="options.php">
-						 <?php settings_errors(); ?>
-						 <?php settings_fields('configure_advanced_settings'); ?>
-						 <br><br><h3>Advanced settings</h3><hr><br>
-						 <input type="text" value="<?php echo $configuration_id_new_version ?>" style="display:none;" name="configuration_id" placeholder="none">
-						 <p style="color:green;">Advanced settings configured successfully!</p>
-					 	<?php submit_button('Continue...'); ?>
-			 		</form>
-				<?php	 
-			 }else{
-				 ?>
-				 <form method="post" action="options.php">
-					 <?php settings_errors(); ?>
-					 <?php settings_fields('configure_advanced_settings'); ?>
-					 <br><br><h3>Advanced settings</h3><hr><br>
-					 <!--Display version updated message if the plugin is updated from old version to this version.-->
-					 <?php if(get_option('configuration_id') == $configuration_id_old_version){
-						 echo'Plugin updated successfully!';
-					 }?>
-					 <input type="text" value="<?php echo $configuration_success_id ?>" style="display:none;" name="configuration_id" placeholder="none">
-				 	<?php submit_button('Configure advanced settings'); ?>
-		 		</form>
-				<?php
-			 }
-		    ?>
-	 </div>
-	 <!--Show new informations about the plugin.-->
-	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php" width="500px" height="200px"></div>
-	 <?php
 	 
+	 </div>
+
+	 <!--Show new informations about the plugin.-->
+	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php" width="500px" height="200px"></div>	 
+	
+	 <?php 
+	}
  }
- 
+}
  //Theme Compatibility
  function MaintenanceAlertsMenuCompatibility(){
 	 include_once dirname( __FILE__ ) . '\compatibility_check.php';
