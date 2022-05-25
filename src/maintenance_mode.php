@@ -27,9 +27,12 @@
                 if(get_option('custom_maintenance_page') == ""){
             ?>
                 <center>
-                    <h4 style="font-size:<?php echo get_option('fontSize'); ?>px; color:<?php echo get_option('textcolor'); ?>;"> 
-                        <?php echo'This site is unavailable due to scheduled maintenance. Please check back in a minute.';?> 
-                    </h4>
+                    <div class="maintenance-mode-content-layer-inc">
+                        <img style="width:20%;" src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/cdn/wp-maintenance-alert-img(barrier).png" alt="wp-maintenance-alert-img(barrier)">
+                        <h4 style="font-size:<?php echo get_option('fontSize'); ?>px; color:<?php echo get_option('textcolor'); ?>;">
+                            This site is unavailable due to scheduled maintenance. Please check back in a minute.
+                        </h4>
+                    </div>
                 </center>
             <?php
                 }else{

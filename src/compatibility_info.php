@@ -41,6 +41,20 @@
         {endconfig}";
     }elseif($my_theme == "Kadence"){
         $progress = 92;
+        $auto_config_text = "{beginconfig ==05/21/2022 10:24:29 am ==}
+        {||textcolor(option_group)||
+        #FFFFFF
+        ||textcolor(option_group)||}
+        {||backgroundcolor(option_group)||
+        #E39C19
+        ||backgroundcolor(option_group)||}
+        {||fontSize(option_group)||
+        18
+        ||fontSize(option_group)||}
+        {||alertPadding(option_group)||
+        15
+        ||alertPadding(option_group)||}
+        {endconfig}";
     }elseif($my_theme == "OceanWP"){
         $progress = 87;
     }elseif($my_theme == "Twenty Twenty-One"){
@@ -61,6 +75,9 @@
         $message = "This plugin is not tested with the theme you are currently using. But it may be working. If the theme is compatible you can <a href='https://github.com/Himashana/Maintenance-Alerts-WP-Plugin/wiki/Introduction'>submit the compatibility data and contribute to the project</a>";
     }
 
+
+
+    
     //Set compaibility report color and message according to the compatibility report progress.
     if($progress >= 60){
         $color = "green";
