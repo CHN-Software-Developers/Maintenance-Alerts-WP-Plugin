@@ -87,7 +87,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  //Display Maintenance Alert
  add_action("wp_body_open", "add_alert");
  
- function add_alert(){	 
+ function add_alert(){
 	 //If the user select 'Enabled', a maintenance alert/mode will display on the website.
 	 $is_show_maintenance = true;
 	 
@@ -98,7 +98,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		}
 	 }
 
-	 //Display only of user enabled and $is_show_maintenance variable set to true.
+	 //Display only if enabled and $is_show_maintenance variable set to true.
 	 if(get_option('Action_select') == "Enabled" && $is_show_maintenance == true){
 		//Display maintenance mode.
 		if(get_option('Maintenance_type') == "Maintenance_Mode"){
@@ -127,11 +127,12 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 register_setting('option_group', 'Force_maintenance_when_loggedin');
 	 register_setting('option_group', 'custom_maintenance_page');
 	 register_setting('Activation_option_group', 'CHN_Account_User');
-	 register_setting('configure_advanced_settings', 'configuration_id');
+	 register_setting('configuration', 'first_user_config');
 	 register_setting('configuration', 'current_configuration');
 	 register_setting('configuration', 'config_restore_sequence');
 	 register_setting('Agreement', 'is_License_accepted');
 	 register_setting('Agreement', 'is_terms_and_conditions_accepted');
+	 register_setting('notifications', 'is_review_done');
  }
  
  add_action('admin_init', 'alert_register_settings');
@@ -143,14 +144,10 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  	 $Message_background_color = "";
 	 $Message_font_size = "";
 	 $Message_alert_padding = "";
-	 //The configuration_id change from version to version.
- 	 $configuration_id_old_version = "config_0003"; // old version id
- 	 $configuration_id_new_version = "config_0004"; // new version id
- 	 $configuration_success_id = "config_0004_done";// configuration success identification id
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.0-dev000"
+	$License_agreement_and_TandC_frompluginversion = "1.2.0-dev001"
 	 ?>
 	
 	<h1>Maintenance Alerts</h1><br>
@@ -205,6 +202,18 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		}else{
 	?>
 
+	<!-- Get the user experiences -->
+	<?php
+		if(get_option('is_review_done') != "yes"){
+			?>
+				<div class="notice notice-info is-dismissible">
+					<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
+					<a href="https://wordpress.org/support/plugin/maintenance-alerts/reviews/" target="_BLANK">Add my quick review</a>
+				</div>
+			<?php
+		}
+	?>
+
 	 <!--Connect CHN Account-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
@@ -249,41 +258,21 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 </div><br>
 
 	 <?php
-		if(get_option('configuration_id') == $configuration_id_new_version){
-		 //No anything to do.
-		}elseif(get_option('configuration_id') == $configuration_success_id){
+		if(get_option('first_user_config') != "done"){
 		 ?>
-		 	<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><div class="notice notice-warning">
-			 <form method="post" action="options.php">
-				 <?php settings_errors(); ?>
-				 <?php settings_fields('configure_advanced_settings'); ?>
-				 <br><br><h3>Maintenance Alerts - configuration</h3><hr><br>
-				 <input type="text" value="<?php echo $configuration_id_new_version ?>" style="display:none;" name="configuration_id" placeholder="none">
-				 <p style="color:green;">Settings configured successfully! You can go to the compatibility section to start auto-configuration with the theme you are using (if the theme is supported only).</p>
-			 	<?php submit_button('Continue...'); ?>
-			</form>
-			</div></div>
-		<?php	 
-		}else{
-		 ?>
-		 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><div class="notice notice-warning">
-		 <form method="post" action="options.php">
-			 <?php settings_errors(); ?>
-			 <?php settings_fields('configure_advanced_settings'); ?>
-			 <br><br><h3>Maintenance Alerts - configuration</h3><hr>
-			 <!--Display version updated message if the plugin is updated from old version to this version.-->
-			 <?php if(get_option('configuration_id') == $configuration_id_old_version){
-				 echo'Plugin updated successfully!';
-			 }?>
-			 <input type="text" value="<?php echo $configuration_success_id ?>" style="display:none;" name="configuration_id" placeholder="none">
-		 	<?php submit_button('Start now'); ?>
-		</form></div></div>
+			<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><div class="notice notice-warning">
+			<form method="post" action="options.php">
+				<?php settings_fields('configuration'); ?>
+				<br><br><h3>Maintenance Alerts - configuration</h3><hr>
+				<input type="text" value="done" style="display:none;" name="first_user_config" placeholder="none">
+				<?php submit_button('Start now'); ?>
+			</form></div></div>
 		<?php
 		}
 	  ?>
 	
-	 <!-- The configuration_id change from version to version. -->
-	 <?php if(get_option('configuration_id') == $configuration_id_new_version){ ?>
+	<!-- If first user config done -->
+	 <?php if(get_option('first_user_config') == "done"){ ?>
 
 	 <!--Maintenance Alerts settings box-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
@@ -351,7 +340,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			?>	 
 				
 	
-				<!-- Advance settings for alert/ General settings for maintenance mode -->
+				<!-- Title : Advance settings for alert/General settings for maintenance mode -->
 				<?php
 				if(get_option('Maintenance_type') == "Maintenance_Alert"){
 					echo'<br><br><h3>Advanced settings</h3><hr><br>';
@@ -472,7 +461,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 </div>
 
 	 <!--Show new informations about the plugin.-->
-	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php" width="500px" height="200px"></div>	 
+	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php?request={688D0D1F-3298-4d27-B6A8-647A2B3723D9}" width="500px" height="200px"></div>	 
 	
 	 <?php 
 	}
