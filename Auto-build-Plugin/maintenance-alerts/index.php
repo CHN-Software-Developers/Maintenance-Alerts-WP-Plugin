@@ -207,8 +207,18 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		if(get_option('is_review_done') != "yes"){
 			?>
 				<div class="notice notice-info is-dismissible">
-					<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
-					<a href="https://wordpress.org/support/plugin/maintenance-alerts/reviews/" target="_BLANK">Add my quick review</a>
+				<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
+					<?php if($_GET['maintenance_alerts_action'] == "display_to_close_review"){ ?>
+						<form method="post" action="options.php">
+							<?php settings_fields('notifications'); ?>
+							<input type="text" name="is_review_done" value="yes" style="width:30%; display:none;">
+							<?php submit_button('Close notification'); ?>
+						</form>
+					<?php }else{ ?>
+						<a href="https://wordpress.org/support/plugin/maintenance-alerts/reviews/" target="_BLANK">Add my quick review</a>
+						<br><a href="admin.php?page=Maintenance-Alerts&maintenance_alerts_action=display_to_close_review" >No, maybe later</a>
+						<br><a href="admin.php?page=Maintenance-Alerts&maintenance_alerts_action=display_to_close_review" >I already did</a>
+					<?php } ?>
 				</div>
 			<?php
 		}
