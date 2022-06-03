@@ -1,6 +1,6 @@
 <?php
     /*  
-    You can use this plugin to show the website maintenance scheduled information to the visitors of your website. 
+    You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
     Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -69,8 +69,8 @@
         $progress = 3;
     }elseif($my_theme == "Twenty Twenty-Two"){
         $progress = 96;
-    //}elseif($my_theme == "Hello Elementor"){
-        //$progress = 39;
+    }elseif($my_theme == "Hello Elementor"){
+        $progress = 100;
     }else{
         $message = "This plugin is not tested with the theme you are currently using. But it may be working. If the theme is compatible you can <a href='https://github.com/Himashana/Maintenance-Alerts-WP-Plugin/wiki/Introduction'>submit the compatibility data and contribute to the project</a>";
     }
