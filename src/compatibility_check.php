@@ -1,6 +1,6 @@
 <?php
 /*
-    You can use this plugin to show the website maintenance scheduled information to the visitors of your website. 
+    You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
     Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -27,12 +27,14 @@
     echo 'Theme version : ' . $my_theme->get( 'Version' ).'<br>';
     echo'<h3>Compatibility</h3>';
 
+    // Read the file that contains all of the compatibility informations.
     include_once dirname( __FILE__ ) . '\compatibility_info.php';
     
     ?>
     <div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:<?php echo $progress ?>%; background-color:<?php echo $color ?>; height:20px;"></div></div>';
     <br><p style="color:<?php echo $color ?>;"><?php echo $message ?></p>
 
+    <!-- Enable auto configuration if it is supported. -->
     <?php if($auto_config_text){ ?>
         <form method="post" action="options.php">
             <?php settings_fields('configuration'); ?>

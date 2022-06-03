@@ -5,7 +5,7 @@
 */
 
 /*  
-    You can use this plugin to show the website maintenance scheduled information to the visitors of your website. 
+    You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
     Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -33,21 +33,12 @@
 </head>
 
 <body>
-    
-    <?php get_header(); ?>
-                
+   
     <?php
         while(have_posts()) : the_post();
-            if(wp_get_theme()->get('Name') == "Kadence"){    
-                the_content();
-            }elseif(wp_get_theme()->get('Name') == "Astra"){
-                get_template_part( 'template-parts/content', 'page' );
-                if ( comments_open() || get_comments_number() ) {
-                    comments_template();
-                }
-            }
-            
+            the_content();
         endwhile;
     ?>
+    
 </body>
 </html>

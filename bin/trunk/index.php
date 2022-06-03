@@ -1,13 +1,13 @@
 <?php
 	/**
 	 * Plugin Name:       Maintenance alerts
-	 * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
-	 * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
+	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
+	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
 	 * Version:           1.2.0
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
-	 * Author URI:        https://chnsoftwaredevelopers.com/
+	 * Author URI:        https://chnsoftwaredevelopers.com
 	 * License:           GPL v2 or later
 	 * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 	 * Text Domain:       Maintenance_alerts
@@ -17,7 +17,7 @@
  */
  
  /*
-    You can use this plugin to show the website maintenance scheduled information to the visitors of your website. 
+    You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
     Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -147,7 +147,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.0-dev001"
+	$License_agreement_and_TandC_frompluginversion = "1.2.0"
 	 ?>
 	
 	<h1>Maintenance Alerts</h1><br>
@@ -160,7 +160,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 					<b><h3>License agreement</h3></b>
 					<div style="width:700px; padding:3px; border:1px solid gray;">
-						You can use this plugin to show the website maintenance scheduled information to the visitors of your website.<br> 
+						You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.<br> 
 						Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 						<br><br>
 						This program is free software: you can redistribute it and/or modify<br>
@@ -267,6 +267,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		    ?>
 	 </div><br>
 
+	 <!-- If first user config not done -->
 	 <?php
 		if(get_option('first_user_config') != "done"){
 		 ?>
@@ -494,9 +495,9 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
          <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
             * Plugin Name:       Maintenance alerts
             <br>
-            * Plugin URI:        https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts
+            * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
             <br>
-            * Description:       This plugin shows the website maintenance scheduled information to the visitors on the top of the website.
+            * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
             * Version:           1.2.0
             <br>
@@ -506,7 +507,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
             <br>
             * Author:            Himashana
             <br>
-            * Author URI:        https://chnsoftwaredevelopers.com/
+            * Author URI:        https://chnsoftwaredevelopers.com
             <br>
             * License:           GPL v2 or later
             <br>
