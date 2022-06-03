@@ -37,7 +37,7 @@ Please make sure that the theme you are using is compatible with this plugin. Af
 * [New] : Export/Import configuration.
 * [New] : Auto configuration with the theme.
 * [Removed] : Advanced settings configuration window.
-* [Compatibility] : Tested with WordPress 5.9.
+* [Compatibility] : Tested with WordPress 6.0
 * [Fix] : Bug fixes.
 
 = 1.1.4 =
