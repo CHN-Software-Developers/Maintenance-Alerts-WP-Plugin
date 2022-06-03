@@ -31,10 +31,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__).'templates_styles.css' ?>">
 </head>
-<body style="background-color:<?php echo get_option('backgroundcolor'); ?>">
+
+<body>
+    
+    <?php get_header(); ?>
+                
     <?php
         while(have_posts()) : the_post();
-            the_content();
+            if(wp_get_theme()->get('Name') == "Kadence"){    
+                the_content();
+            }elseif(wp_get_theme()->get('Name') == "Astra"){
+                get_template_part( 'template-parts/content', 'page' );
+                if ( comments_open() || get_comments_number() ) {
+                    comments_template();
+                }
+            }
+            
         endwhile;
     ?>
 </body>
