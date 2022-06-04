@@ -28,7 +28,7 @@
     echo'<h3>Compatibility</h3>';
 
     // Read the file that contains all of the compatibility informations.
-    include_once dirname( __FILE__ ) . '\compatibility_info.php';
+    include_once dirname( __FILE__ ) . '/compatibility_info.php';
     
     ?>
     <div style="width:100%; background-color:#F4F4F4; height:20px;"><div style="width:<?php echo $progress ?>%; background-color:<?php echo $color ?>; height:20px;"></div></div>';
