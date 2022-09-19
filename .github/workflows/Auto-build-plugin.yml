@@ -85,6 +85,7 @@ jobs:
         cd Auto-build-Plugin
         mv src maintenance-alerts
         zip -r maintenance-alerts.zip . -x *.git*
+        sha1sum maintenance-alerts.zip > hash-maintenance-alerts.txt.sha1
         
     - name: Commit files
       run: |
