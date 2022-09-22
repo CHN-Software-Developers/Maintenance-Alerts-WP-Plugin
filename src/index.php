@@ -1,4 +1,5 @@
 <?php
+session_start();
 	/**
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
@@ -147,7 +148,14 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.0"
+	$License_agreement_and_TandC_frompluginversion = "1.2.0";
+
+	if(isset($_GET['maintenance_alerts_action'])){
+		$maintenance_alerts_action = $_GET['maintenance_alerts_action'];
+	}else{
+		$maintenance_alerts_action = "";
+	}
+
 	 ?>
 	
 	<h1>Maintenance Alerts</h1><br>
@@ -208,7 +216,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			?>
 				<div class="notice notice-info is-dismissible">
 				<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
-					<?php if($_GET['maintenance_alerts_action'] == "display_to_close_review"){ ?>
+					<?php if($maintenance_alerts_action == "display_to_close_review"){ ?>
 						<form method="post" action="options.php">
 							<?php settings_fields('notifications'); ?>
 							<input type="text" name="is_review_done" value="yes" style="width:30%; display:none;">
@@ -243,22 +251,46 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 
 				 <div class="notice notice-warning is-dismissible">
 					 <?php
-						if($_GET['maintenance_alerts_action'] == "runregistration" && isset($_GET['CHNACCOUNTEMAIL'])){
-					 		?>
-							<form method="post" action="options.php">
-								<?php settings_fields('Activation_option_group'); ?>
-								<br>CHN Account belongs to <?php echo $_GET['CHNACCOUNTEMAIL']; ?><input type="text" name="CHN_Account_User" value="<?php echo $_GET['CHNACCOUNTEMAIL']; ?>" style="width:30%; display:none;">
-								<?php
-									submit_button('Connect account');
-								?>
-							</form>
-							<?php
+						if($maintenance_alerts_action == "runregistration" && isset($_GET['CHNACCOUNTEMAIL']) && isset($_GET['token']) && isset($_SESSION["chnsdauthonce"])){
+							$auth_email = $_GET['CHNACCOUNTEMAIL'];
+							$auth_token = $_GET['token'];
+							$auth_string = $_SESSION["chnsdauthonce"];
+
+							$_SESSION["chnsdauthonce"] = NULL;
+
+							$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/auth_with_key3.php?email=" . $auth_email . "&token=" . $auth_token . "&string=" . $auth_string;
+							
+							$response = json_decode(file_get_contents($auth_api));
+							
+							if($response == true){
+								if($response->email != "none"){
+									?>
+									<form method="post" action="options.php">
+										<?php settings_fields('Activation_option_group'); ?>
+										<br>CHN Account belongs to <?php echo $response->user; ?><input type="text" name="CHN_Account_User" value="<?php echo $response->email; ?>" style="width:30%; display:none;">
+										<?php
+											submit_button('Connect account');
+										?>
+									</form>
+									<?php
+								}else{
+									echo '<div style="padding:10px;" class="notice notice-error is-dismissible">Sorry...! The authentication process was interrupted due to incorrect login credentials.</div>';
+								}
+							}else{
+								echo '<div style="padding:10px;" class="notice notice-error is-dismissible">Sorry...! An unexpected error occurred.</div>';
+							}
+							
 						}else{
-							?>
-							<p>Connect your CHN account to get new information and updates.</p>
-				 			<a href="https://chnsoftwaredevelopers.com/v2.0/login/?action=registerplugin&productname=maintenance-alerts&callback_url=<?php echo home_url() ?>&string=58306835u483380220482"><button>Connect my CHN Account</button></a><br>
-							<br>
-							<?php
+							$_SESSION["chnsdauthonce"] = rand(111111111,999999999);
+							
+							if(isset($_SESSION["chnsdauthonce"])){
+								?>
+									<p>Connect your CHN account to get new information and updates.</p>
+									<a href="https://chnsoftwaredevelopers.com/v2.0/login/?action=registerplugin&productname=maintenance-alerts&callback_url=<?php echo home_url() ?>&string=<?php echo $_SESSION["chnsdauthonce"]; ?>"><button>Connect my CHN Account</button></a><br>
+									<br>
+								<?php
+							}
+							
 						}
 						?>		
 				</div>
