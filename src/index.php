@@ -35,6 +35,12 @@ session_start();
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
+if(isset($_GET['maintenance_alerts_action'])){
+	$GLOBALS['maintenance_alerts_action'] = $_GET['maintenance_alerts_action'];
+}else{
+	$GLOBALS['maintenance_alerts_action'] = "";
+}
+
 //Configure Maintenance alert page template.
 function maintenance_alert_template_array(){
 	//Maintenance alert template array
@@ -148,13 +154,9 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.0";
+	$License_agreement_and_TandC_frompluginversion = "1.2.2-dev0";
 
-	if(isset($_GET['maintenance_alerts_action'])){
-		$maintenance_alerts_action = $_GET['maintenance_alerts_action'];
-	}else{
-		$maintenance_alerts_action = "";
-	}
+	
 
 	 ?>
 	
@@ -196,8 +198,11 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 				<b><h3>Terms and conditions</h3></b>
 					<div style="width:700px; padding:3px; border:1px solid gray;">
-					<p style="background-color:#D0F4B2; width:680px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at https://chnsoftwaredevelopers.com</p>
-					<iframe src="https://chnsoftwaredevelopers.com/Terms-And-Conditions/#fullview" style="width:100%; height:800px;"></iframe>
+						<p style="background-color:#D0F4B2; width:680px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at https://chnsoftwaredevelopers.com</p>
+						<button onclick="document.getElementById('TandCiframe').style.display = 'none';">Close</button><br><br>
+						<div id="TandCiframe">
+							<iframe src="https://chnsoftwaredevelopers.com/Terms-And-Conditions/#fullview" style="width:100%; height:800px;"></iframe>
+						</div>
 					</div>
 					<br>
 					<form method="post" action="options.php">
@@ -216,7 +221,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			?>
 				<div class="notice notice-info is-dismissible">
 				<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
-					<?php if($maintenance_alerts_action == "display_to_close_review"){ ?>
+					<?php if($GLOBALS['maintenance_alerts_action'] == "display_to_close_review"){ ?>
 						<form method="post" action="options.php">
 							<?php settings_fields('notifications'); ?>
 							<input type="text" name="is_review_done" value="yes" style="width:30%; display:none;">
@@ -251,7 +256,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 
 				 <div class="notice notice-warning is-dismissible">
 					 <?php
-						if($maintenance_alerts_action == "runregistration" && isset($_GET['CHNACCOUNTEMAIL']) && isset($_GET['token']) && isset($_SESSION["chnsdauthonce"])){
+						if($GLOBALS['maintenance_alerts_action'] == "runregistration" && isset($_GET['CHNACCOUNTEMAIL']) && isset($_GET['token']) && isset($_SESSION["chnsdauthonce"])){
 							$auth_email = $_GET['CHNACCOUNTEMAIL'];
 							$auth_token = $_GET['token'];
 							$auth_string = $_SESSION["chnsdauthonce"];
