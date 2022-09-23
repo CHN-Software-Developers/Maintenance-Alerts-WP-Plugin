@@ -3,7 +3,7 @@ Contributors: Himashana
 Tags: Maintenance, alerts, Himashana, Maintenance alerts, Top bar, Top text, text
 Requires at least: 5.2
 Tested up to: 6.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,10 @@ Please make sure that the theme you are using is compatible with this plugin. Af
 3. Maintenance Alerts - Compatibility check
 
 == Changelog ==
+
+= 1.2.2 =
+* [Security improvements] : Used an API to authenticate users with CHN Account.
+* [Bug fix] : Fixed the issue of reading null values of the variables even those that are not defined.
 
 = 1.2.1 =
 * [Bug fix] : The new features not working in some systems issue has been fixed.
@@ -71,6 +75,9 @@ Please make sure that the theme you are using is compatible with this plugin. Af
 * Initial release of Maintenance alerts.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+* Security improvements and bug fixes.
 
 = 1.2.1 =
 * The new features not working in some systems issue has been fixed.
