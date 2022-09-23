@@ -42,7 +42,7 @@
         <h1>Maintenance Alerts - Configuration</h1>
         
         <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
-            <?php if($_GET['maintenance_alerts_action'] != "auto-config"){ ?>
+            <?php if($GLOBALS['maintenance_alerts_action'] != "auto-config"){ ?>
             <!-- Get and display the current configuration to the user according to a format -->
             <h3>Export configuration</h3>
 
@@ -66,7 +66,7 @@
             <!-- Import custom configuration formatted text -->
             <h3>Import configuration</h3>
             <div style="background-color:#E2E7EC; width:700px; padding:10px; border:4px solid gray;" disabled>
-            <?php if($_GET['maintenance_alerts_action'] != "auto-config"){ ?>
+            <?php if($GLOBALS['maintenance_alerts_action'] != "auto-config"){ ?>
             <form method="post" action="options.php">
                 <?php settings_fields('configuration'); ?>
                 <?php
@@ -75,7 +75,7 @@
                     submit_button('Import');
                 ?>
             </form>
-            <?php }elseif($_GET['maintenance_alerts_action'] == "auto-config" && get_option('current_configuration') == ""){
+            <?php }elseif($GLOBALS['maintenance_alerts_action'] == "auto-config" && get_option('current_configuration') == ""){
                 echo '<p>Auto-config process completed.</p>';
             } ?>
             <?php

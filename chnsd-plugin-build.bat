@@ -14,9 +14,11 @@ copy src bin\trunk
 
 cd bin\trunk
 mkdir templates
+mkdir js
 cd ..
 cd ..
 copy src\templates bin\trunk\templates
+copy src\js bin\trunk\js
 
 echo -------------------------------
 echo Plugin built successfully.
