@@ -4,7 +4,7 @@ session_start();
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.2.1
+	 * Version:           1.2.2
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -35,6 +35,16 @@ session_start();
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
+// Include the js scripts that are in the js folder.
+wp_enqueue_script( 'actions-js', plugins_url( '/js/actions.js', __FILE__ ));
+
+
+if(isset($_GET['maintenance_alerts_action'])){
+	$GLOBALS['maintenance_alerts_action'] = $_GET['maintenance_alerts_action'];
+}else{
+	$GLOBALS['maintenance_alerts_action'] = "";
+}
+
 //Configure Maintenance alert page template.
 function maintenance_alert_template_array(){
 	//Maintenance alert template array
@@ -148,13 +158,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.0";
-
-	if(isset($_GET['maintenance_alerts_action'])){
-		$maintenance_alerts_action = $_GET['maintenance_alerts_action'];
-	}else{
-		$maintenance_alerts_action = "";
-	}
+	$License_agreement_and_TandC_frompluginversion = "1.2.2";
 
 	 ?>
 	
@@ -194,10 +198,19 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 		}elseif(get_option('is_License_accepted') == "true".$License_agreement_and_TandC_frompluginversion && get_option('is_terms_and_conditions_accepted') != "true".$License_agreement_and_TandC_frompluginversion){
 			?>
 				<div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
-				<b><h3>Terms and conditions</h3></b>
+				
+				<!-- Toggle license agreement and terms and conditions -->
+				<b><h3 onclick="showTandCiframe();" id="showTandCbtn" style="color:blue;">TERMS AND CONDITIONS</h3>
+				<h3 onclick="showPrivacyPolicyiframe();" id="showPrivacyPolicybtn">PRIVACY POLICY</h3></b>
+					
 					<div style="width:700px; padding:3px; border:1px solid gray;">
-					<p style="background-color:#D0F4B2; width:680px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at https://chnsoftwaredevelopers.com</p>
-					<iframe src="https://chnsoftwaredevelopers.com/Terms-And-Conditions/#fullview" style="width:100%; height:800px;"></iframe>
+						<p style="background-color:#D0F4B2; width:680px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at https://chnsoftwaredevelopers.com</p>
+						<div id="TandCiframe">
+							<iframe src="https://chnsoftwaredevelopers.com/Terms-And-Conditions/#fullview" style="width:100%; height:800px;"></iframe>
+						</div>
+						<div id="privacyPolicyiframe" style="display:none;">
+							<iframe src="https://chnsoftwaredevelopers.com/Privacy-Policy/#fullview" style="width:100%; height:800px;"></iframe>
+						</div>
 					</div>
 					<br>
 					<form method="post" action="options.php">
@@ -216,7 +229,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 			?>
 				<div class="notice notice-info is-dismissible">
 				<p>Hi...! We would like to hear about your user experience with maintenance alerts. Please take a few minutes from your valuable time to give a small review to us.</p>
-					<?php if($maintenance_alerts_action == "display_to_close_review"){ ?>
+					<?php if($GLOBALS['maintenance_alerts_action'] == "display_to_close_review"){ ?>
 						<form method="post" action="options.php">
 							<?php settings_fields('notifications'); ?>
 							<input type="text" name="is_review_done" value="yes" style="width:30%; display:none;">
@@ -251,7 +264,9 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 
 				 <div class="notice notice-warning is-dismissible">
 					 <?php
-						if($maintenance_alerts_action == "runregistration" && isset($_GET['CHNACCOUNTEMAIL']) && isset($_GET['token']) && isset($_SESSION["chnsdauthonce"])){
+						// Once receive the required parameters for the authentication process read the JSON response by passing the data along with the token to the API.
+
+						if($GLOBALS['maintenance_alerts_action'] == "runregistration" && isset($_GET['CHNACCOUNTEMAIL']) && isset($_GET['token']) && isset($_SESSION["chnsdauthonce"])){
 							$auth_email = $_GET['CHNACCOUNTEMAIL'];
 							$auth_token = $_GET['token'];
 							$auth_string = $_SESSION["chnsdauthonce"];
@@ -262,7 +277,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 							
 							$response = json_decode(file_get_contents($auth_api));
 							
-							if($response == true){
+							if($response == true){ // If the API connection successful,
 								if($response->email != "none"){
 									?>
 									<form method="post" action="options.php">
@@ -281,11 +296,13 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 							}
 							
 						}else{
+							// Generate a unique id to pass it to the CHN Account login page.
 							$_SESSION["chnsdauthonce"] = rand(111111111,999999999);
 							
 							if(isset($_SESSION["chnsdauthonce"])){
 								?>
 									<p>Connect your CHN account to get new information and updates.</p>
+									<!-- Pass the necessary parameters to the CHN Account login page with the callback URL. -->
 									<a href="https://chnsoftwaredevelopers.com/v2.0/login/?action=registerplugin&productname=maintenance-alerts&callback_url=<?php echo home_url() ?>&string=<?php echo $_SESSION["chnsdauthonce"]; ?>"><button>Connect my CHN Account</button></a><br>
 									<br>
 								<?php
@@ -531,7 +548,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
             <br>
             * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
-            * Version:           1.2.1
+            * Version:           1.2.2
             <br>
             * Requires at least: 5.2
             <br>

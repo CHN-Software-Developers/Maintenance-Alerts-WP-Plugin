@@ -1,0 +1,1 @@
+(echo Y & echo Y & echo Y) | chnsd-plugin-uninstall.bat

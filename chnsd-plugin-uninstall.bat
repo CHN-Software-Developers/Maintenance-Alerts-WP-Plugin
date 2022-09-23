@@ -6,6 +6,11 @@ cd maintenance-alerts
 echo remove folder : templates
 del templates
 rmdir templates
+
+echo remove folder : js
+del js
+rmdir js
+
 cd ..
 
 echo remove folder : maintenance-alerts
