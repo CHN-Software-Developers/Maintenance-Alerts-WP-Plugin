@@ -469,7 +469,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
 				 
 				 <!-- Selection to force disable when user logged in  -->
-				 <br><br><label for="Onclick_event">Force disable when user logged in <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
+				 <br><br><label for="Onclick_event">Force disable when user logged in : </label>
+				 <!-- <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> -->
 				 <?php
 					if(get_option('Force_maintenance_when_loggedin') == "Yes" || get_option('Force_maintenance_when_loggedin') == ""){
 						?>
@@ -502,8 +503,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 										http://mydomain.com/Maintenance-Alerts/wordpress/?page_id=13 (Incorrect)
 								</p></b>
 						 		</div>							
-								 <label>Display custom page <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
-								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
+								 <label>Display custom page : </label>
+								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure only the general settings." class="large-text" style="width:50%" value="<?php
 									echo get_option('custom_maintenance_page');
 								?>">
 							 <?php
