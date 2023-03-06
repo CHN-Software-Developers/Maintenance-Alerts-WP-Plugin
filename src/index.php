@@ -4,7 +4,7 @@ session_start();
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.2.2
+	 * Version:           1.2.3
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -19,7 +19,7 @@ session_start();
  
  /*
     You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-    Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
+    Copyright (C) 2021-2023  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ session_start();
  */
  
 // Include the js scripts that are in the js folder.
-wp_enqueue_script( 'actions-js', plugins_url( '/js/actions.js', __FILE__ ));
+wp_enqueue_script( 'actions-js', plugins_url( '/js/actions.js', __FILE__ ), '1.1');
 
 
 if(isset($_GET['maintenance_alerts_action'])){
@@ -158,7 +158,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.2";
+	$License_agreement_and_TandC_frompluginversion = "1.2.3";
 
 	 ?>
 	
@@ -173,7 +173,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					<b><h3>License agreement</h3></b>
 					<div style="width:700px; padding:3px; border:1px solid gray;">
 						You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.<br> 
-						Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
+						Copyright (C) 2021-2023  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 						<br><br>
 						This program is free software: you can redistribute it and/or modify<br>
 						it under the terms of the GNU General Public License as published by<br>
@@ -412,7 +412,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					  
 				<!-- Change text color -->
 				<label for="textcolor">Text color : </label>
-				<input type="text" id="textcolor" name="textcolor" value="<?php
+				<input type="text" id="textcolor" name="textcolor" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('textcolor') <> ""){
 				 	echo get_option('textcolor'); 
 					$Message_text_color = "";
@@ -420,11 +420,11 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					echo '#FFFFFF';
 					$Message_text_color = "Some settings are not saved correctly!";
 				 }
-				?>">
+				?>">&nbsp;<label id="textcolorDisplayBox" style="border:2px solid black; padding-left:20px; padding-top:5px; background-color:<?php echo get_option('textcolor'); ?>;"></label>&nbsp;
 				
 				<!-- Change background color -->
 				<label for="backgroundcolor">Background color :</label>
-				<input type="text" id="backgroundcolor" name="backgroundcolor" value="<?php
+				<input type="text" id="backgroundcolor" name="backgroundcolor" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('backgroundcolor') <> ""){
 				 	echo get_option('backgroundcolor'); 
 					$Message_background_color = "";
@@ -432,7 +432,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					echo '#E39C19';
 					$Message_background_color = "Some settings are not saved correctly!";
 				 }
-				?>">
+				?>">&nbsp;<label id="backgroundcolorDisplayBox" style="border:2px solid black; padding-left:20px; padding-top:5px; background-color:<?php echo get_option('backgroundcolor'); ?>;"></label>
 				
 				<br><br>
 				
@@ -469,7 +469,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 <input type="text" id="Onclick_event" name="Onclick_event" value="<?php echo get_option('Onclick_event'); ?>" placeholder="https://">
 				 
 				 <!-- Selection to force disable when user logged in  -->
-				 <br><br><label for="Onclick_event">Force disable when user logged in <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
+				 <br><br><label for="Onclick_event">Force disable when user logged in : </label>
+				 <!-- <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> -->
 				 <?php
 					if(get_option('Force_maintenance_when_loggedin') == "Yes" || get_option('Force_maintenance_when_loggedin') == ""){
 						?>
@@ -502,8 +503,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 										http://mydomain.com/Maintenance-Alerts/wordpress/?page_id=13 (Incorrect)
 								</p></b>
 						 		</div>							
-								 <label>Display custom page <label style="background-color:blue; color:white; font-weight: bold;">&nbsp;New&nbsp;</label> : </label>
-								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure general settings." class="large-text" style="width:50%" value="<?php
+								 <label>Display custom page : </label>
+								<input type="text" id="custom_maintenance_page" name="custom_maintenance_page" placeholder="URL here. Leave blank to configure only the general settings." class="large-text" style="width:50%" value="<?php
 									echo get_option('custom_maintenance_page');
 								?>">
 							 <?php
@@ -521,7 +522,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 </div>
 
 	 <!--Show new informations about the plugin.-->
-	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php?request={688D0D1F-3298-4d27-B6A8-647A2B3723D9}" width="500px" height="200px"></div>	 
+	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;"><p style="background-color:#D0F4B2; width:480px; margin:0px; padding:10px;">This plugin is connected to a secure HTTPS page at <br>https://chnsoftwaredevelopers.com</p><iframe src="https://chnsoftwaredevelopers.com/Himashana/WP-Plugins/Maintenance_alerts/wp-plugin-new-info.php?request={688D0D1F-3298-4d27-B6A8-647A2B332399}" width="500px" height="200px"></div>	 
 	
 	 <?php 
 	}
@@ -548,7 +549,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
             <br>
             * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
-            * Version:           1.2.2
+            * Version:           1.2.3
             <br>
             * Requires at least: 5.2
             <br>

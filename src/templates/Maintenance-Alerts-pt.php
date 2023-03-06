@@ -6,7 +6,7 @@
 
 /*  
     You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-    Copyright (C) 2021-2022  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
+    Copyright (C) 2021-2023  Himashana (Email : Himashana@chnsoftwaredevelopers.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
