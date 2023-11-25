@@ -3,7 +3,7 @@
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.2.0
+	 * Version:           1.2.1
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -102,7 +102,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 if(get_option('Action_select') == "Enabled" && $is_show_maintenance == true){
 		//Display maintenance mode.
 		if(get_option('Maintenance_type') == "Maintenance_Mode"){
-				include_once dirname( __FILE__ ) . '\maintenance_mode.php';	
+				include_once dirname( __FILE__ ) . '/maintenance_mode.php';	
 		}else{ //Display maintenance alert.
 			//If the header text is empty, it will show the default text.
 			if(get_option('field') <> ""){
@@ -480,12 +480,12 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 }
  //Theme Compatibility
  function MaintenanceAlertsMenuCompatibility(){
-	 include_once dirname( __FILE__ ) . '\compatibility_check.php';
+	 include_once dirname( __FILE__ ) . '/compatibility_check.php';
  }
  
  //Plugin configuration(export/import)
  function MaintenanceAlertsMenuConfiguration(){
-	include_once dirname( __FILE__ ) . '\Configuration.php';
+	include_once dirname( __FILE__ ) . '/Configuration.php';
 }
 
  //About the plugin
@@ -499,7 +499,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
             <br>
             * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
-            * Version:           1.2.0
+            * Version:           1.2.1
             <br>
             * Requires at least: 5.2
             <br>
