@@ -32,5 +32,7 @@ function showPrivacyPolicyiframe(){
 
 function displayInputColors(){
     document.getElementById("textcolorDisplayBox").style.backgroundColor = document.getElementById("textcolor").value;
+    document.getElementById("textcolorPreview").style.color = document.getElementById("textcolor").value;
     document.getElementById("backgroundcolorDisplayBox").style.backgroundColor = document.getElementById("backgroundcolor").value;
+    document.getElementById("backgroundcolorPreview").style.backgroundColor = document.getElementById("backgroundcolor").value;
 }

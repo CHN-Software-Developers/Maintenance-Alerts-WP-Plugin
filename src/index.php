@@ -94,10 +94,24 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 add_submenu_page( "Maintenance-Alerts", "About", "About", 4, "Maintenance-Alerts-About", "MaintenanceAlertsMenuAbout");	 
  }
  
- 
- //Display Maintenance Alert
+
  add_action("wp_body_open", "add_alert");
  
+ register_activation_hook( __FILE__, 'plugin_activate' );
+ add_action('admin_init', 'plugin_redirect');
+
+function plugin_activate() {
+    add_option('plugin_do_activation_redirect', true);
+}
+
+function plugin_redirect() {
+    if (get_option('plugin_do_activation_redirect', false)) {
+        delete_option('plugin_do_activation_redirect');
+         exit( wp_redirect("admin.php?page=Maintenance-Alerts") );
+    }
+}
+
+ //Display Maintenance Alert
  function add_alert(){
 	 //If the user select 'Enabled', a maintenance alert/mode will display on the website.
 	 $is_show_maintenance = true;
@@ -249,9 +263,23 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
 			 if(get_option('CHN_Account_User') != ""){
+
+				$auth_email = get_option('CHN_Account_User');
+				
+				$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/check_account.php?email=" . $auth_email;
+							
+				$response = json_decode(file_get_contents($auth_api));
+
+				if($response == true){ // If the API connection successful,
+					if($response->user == "none" || $response->status != "Active"){
+						echo '<div style="padding:10px;" class="notice notice-error is-dismissible">Sorry, your account is not active. Please use another account.</div>';
+						$auth_email = "Unknown user";
+						update_option('CHN_Account_User', '');
+					}
+				}
 				?>
 					<div class="notice notice-success is-dismissible">
-						<h3>Plugin connected to : <?php echo get_option('CHN_Account_User'); ?> (CHN Account)</h3>
+						<h3>Plugin connected to : <?php echo $auth_email; ?> (CHN Account)</h3>
 						<form method="post" action="options.php">
 							<?php settings_fields('Activation_option_group'); ?>
 							<input type="text" name="CHN_Account_User" value="" style="width:30%; display:none;">
@@ -434,6 +462,14 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 }
 				?>">&nbsp;<label id="backgroundcolorDisplayBox" style="border:2px solid black; padding-left:20px; padding-top:5px; background-color:<?php echo get_option('backgroundcolor'); ?>;"></label>
 				
+				 <br><br>
+
+				 <div style="width:90%; height:200px; background-color:gray;">
+				 	<div id="backgroundcolorPreview" style="padding-top:10px; padding-bottom:10px; background-color:<?php echo get_option('backgroundcolor'); ?>;">
+				 		<center><h3 id="textcolorPreview" style="color:<?php echo get_option('textcolor'); ?>;">Alert text</h3></center>
+					</div>
+				</div>
+
 				<br><br>
 				
 				<!-- Change font size -->
