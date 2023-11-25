@@ -36,8 +36,8 @@ session_start();
  */
  
 // Include the js scripts that are in the js folder.
-wp_enqueue_script( 'actions-js', plugins_url( '/js/actions.js', __FILE__ ), '1.1');
-
+wp_enqueue_script( 'actions', plugins_url( '/js/actions.js', __FILE__ ), array(), "1.2");
+wp_enqueue_style( 'font-awesome', plugin_dir_url(__FILE__).'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
 if(isset($_GET['maintenance_alerts_action'])){
 	$GLOBALS['maintenance_alerts_action'] = $_GET['maintenance_alerts_action'];
@@ -98,6 +98,8 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
  add_action("wp_body_open", "add_alert");
  
  register_activation_hook( __FILE__, 'plugin_activate' );
+ register_deactivation_hook( __FILE__, 'plugin_deactivate' );
+
  add_action('admin_init', 'plugin_redirect');
 
 function plugin_activate() {
@@ -109,6 +111,10 @@ function plugin_redirect() {
         delete_option('plugin_do_activation_redirect');
          exit( wp_redirect("admin.php?page=Maintenance-Alerts") );
     }
+}
+
+function plugin_deactivate(){
+	update_option('first_user_config', '');
 }
 
  //Display Maintenance Alert
@@ -268,7 +274,7 @@ function plugin_redirect() {
 				
 				$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/check_account.php?email=" . $auth_email;
 							
-				$response = json_decode(file_get_contents($auth_api));
+				$response = json_decode(wp_remote_retrieve_body(wp_remote_get($auth_api)));
 
 				if($response == true){ // If the API connection successful,
 					if($response->user == "none" || $response->status != "Active"){
@@ -298,13 +304,14 @@ function plugin_redirect() {
 							$auth_email = $_GET['CHNACCOUNTEMAIL'];
 							$auth_token = $_GET['token'];
 							$auth_string = $_SESSION["chnsdauthonce"];
-
+							
 							$_SESSION["chnsdauthonce"] = NULL;
 
 							$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/auth_with_key3.php?email=" . $auth_email . "&token=" . $auth_token . "&string=" . $auth_string;
 							
-							$response = json_decode(file_get_contents($auth_api));
+							$response = json_decode(wp_remote_retrieve_body(wp_remote_get($auth_api)));
 							
+
 							if($response == true){ // If the API connection successful,
 								if($response->email != "none"){
 									?>
@@ -440,7 +447,7 @@ function plugin_redirect() {
 					  
 				<!-- Change text color -->
 				<label for="textcolor">Text color : </label>
-				<input type="text" id="textcolor" name="textcolor" onkeyup="displayInputColors();" value="<?php
+				<input type="text" id="textcolor" name="textcolor" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('textcolor') <> ""){
 				 	echo get_option('textcolor'); 
 					$Message_text_color = "";
@@ -452,7 +459,7 @@ function plugin_redirect() {
 				
 				<!-- Change background color -->
 				<label for="backgroundcolor">Background color :</label>
-				<input type="text" id="backgroundcolor" name="backgroundcolor" onkeyup="displayInputColors();" value="<?php
+				<input type="text" id="backgroundcolor" name="backgroundcolor" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('backgroundcolor') <> ""){
 				 	echo get_option('backgroundcolor'); 
 					$Message_background_color = "";
@@ -463,7 +470,7 @@ function plugin_redirect() {
 				?>">&nbsp;<label id="backgroundcolorDisplayBox" style="border:2px solid black; padding-left:20px; padding-top:5px; background-color:<?php echo get_option('backgroundcolor'); ?>;"></label>
 				
 				 <br><br>
-
+				 <div id="colorCombiningWindow" style="display:none;">Loading...<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></div><br>
 				 <div style="width:90%; height:200px; background-color:gray;">
 				 	<div id="backgroundcolorPreview" style="padding-top:10px; padding-bottom:10px; background-color:<?php echo get_option('backgroundcolor'); ?>;">
 				 		<center><h3 id="textcolorPreview" style="color:<?php echo get_option('textcolor'); ?>;">Alert text</h3></center>
