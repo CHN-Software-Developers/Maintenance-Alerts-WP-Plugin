@@ -32,7 +32,7 @@ jobs:
     - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
       with:
-         github_token: ${{ secrets.GITHUB_TOKEN }}
+         github_token: ${{ secrets.GH_ACTIONS_BOT_ACCESS_TOKEN }}
          branch: Auto-build
 
   backup-old-build:
@@ -62,7 +62,7 @@ jobs:
       - name: Push to GitHub repo
         uses: ad-m/github-push-action@master
         with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
+           github_token: ${{ secrets.GH_ACTIONS_BOT_ACCESS_TOKEN }}
            branch: Auto-build
 
   build:
@@ -98,5 +98,5 @@ jobs:
     - name: Push to GitHub repo
       uses: ad-m/github-push-action@master
       with:
-         github_token: ${{ secrets.GITHUB_TOKEN }}
+         github_token: ${{ secrets.GH_ACTIONS_BOT_ACCESS_TOKEN }}
          branch: Auto-build
