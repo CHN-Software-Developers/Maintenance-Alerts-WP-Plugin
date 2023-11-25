@@ -30,7 +30,12 @@ function showPrivacyPolicyiframe(){
     document.getElementById('showTandCbtn').style.color = 'black';
 }
 
+function showColorCombiningWindow(){
+    document.getElementById("colorCombiningWindow").style.display = "block";
+}
+
 function displayInputColors(){
+    document.getElementById("colorCombiningWindow").style.display = "none";
     document.getElementById("textcolorDisplayBox").style.backgroundColor = document.getElementById("textcolor").value;
     document.getElementById("textcolorPreview").style.color = document.getElementById("textcolor").value;
     document.getElementById("backgroundcolorDisplayBox").style.backgroundColor = document.getElementById("backgroundcolor").value;
