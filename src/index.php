@@ -4,7 +4,7 @@ session_start();
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.2.3
+	 * Version:           1.3.0
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -178,7 +178,7 @@ function plugin_deactivate(){
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.3";
+	$License_agreement_and_TandC_frompluginversion = "1.3.0";
 
 	 ?>
 	
@@ -592,7 +592,7 @@ function plugin_deactivate(){
             <br>
             * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
-            * Version:           1.2.3
+            * Version:           1.3.0
             <br>
             * Requires at least: 5.2
             <br>
