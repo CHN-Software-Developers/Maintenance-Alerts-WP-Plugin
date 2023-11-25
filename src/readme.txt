@@ -2,8 +2,8 @@
 Contributors: Himashana
 Tags: Maintenance, alerts, Himashana, Maintenance alerts, Top bar, Top text, text
 Requires at least: 5.2
-Tested up to: 6.1
-Stable tag: 1.2.3
+Tested up to: 6.4
+Stable tag: 1.3.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,13 @@ Please make sure that the theme you are using is compatible with this plugin. Af
 3. Maintenance Alerts - Compatibility check
 
 == Changelog ==
+
+= 1.3.0 =
+* [New] : A new feature that provides a real-time preview of the alert.
+* [New] : Plugin activation and deactivation/uninstallation actions.
+* [update] : Updated the CHN Account login API.
+* [New] : New option to check the CHN Account status through an API.
+
 
 = 1.2.3 =
 * [New] : New feature to preview the colours in real-time.
@@ -78,6 +85,9 @@ Please make sure that the theme you are using is compatible with this plugin. Af
 * Initial release of Maintenance alerts.
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+* A new feature that provides a real-time preview of the alert.
 
 = 1.2.3 =
 * New feature to preview the colours in real-time.
