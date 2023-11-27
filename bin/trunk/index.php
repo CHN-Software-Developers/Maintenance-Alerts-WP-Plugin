@@ -4,7 +4,7 @@ session_start();
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.2.3
+	 * Version:           1.3.0
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -36,8 +36,8 @@ session_start();
  */
  
 // Include the js scripts that are in the js folder.
-wp_enqueue_script( 'actions-js', plugins_url( '/js/actions.js', __FILE__ ), '1.1');
-
+wp_enqueue_script( 'actions', plugins_url( '/js/actions.js', __FILE__ ), array(), "1.2");
+wp_enqueue_style( 'font-awesome', plugin_dir_url(__FILE__).'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
 if(isset($_GET['maintenance_alerts_action'])){
 	$GLOBALS['maintenance_alerts_action'] = $_GET['maintenance_alerts_action'];
@@ -94,10 +94,30 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 add_submenu_page( "Maintenance-Alerts", "About", "About", 4, "Maintenance-Alerts-About", "MaintenanceAlertsMenuAbout");	 
  }
  
- 
- //Display Maintenance Alert
+
  add_action("wp_body_open", "add_alert");
  
+ register_activation_hook( __FILE__, 'plugin_activate' );
+ register_deactivation_hook( __FILE__, 'plugin_deactivate' );
+
+ add_action('admin_init', 'plugin_redirect');
+
+function plugin_activate() {
+    add_option('plugin_do_activation_redirect', true);
+}
+
+function plugin_redirect() {
+    if (get_option('plugin_do_activation_redirect', false)) {
+        delete_option('plugin_do_activation_redirect');
+         exit( wp_redirect("admin.php?page=Maintenance-Alerts") );
+    }
+}
+
+function plugin_deactivate(){
+	update_option('first_user_config', '');
+}
+
+ //Display Maintenance Alert
  function add_alert(){
 	 //If the user select 'Enabled', a maintenance alert/mode will display on the website.
 	 $is_show_maintenance = true;
@@ -158,7 +178,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 
 	// This variable use to define in which version the Terms and 
 	// Conditions and the License agreement need to display again to the user.
-	$License_agreement_and_TandC_frompluginversion = "1.2.3";
+	$License_agreement_and_TandC_frompluginversion = "1.3.0";
 
 	 ?>
 	
@@ -249,9 +269,23 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
 			 if(get_option('CHN_Account_User') != ""){
+
+				$auth_email = get_option('CHN_Account_User');
+				
+				$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/check_account.php?email=" . $auth_email;
+							
+				$response = json_decode(wp_remote_retrieve_body(wp_remote_get($auth_api)));
+
+				if($response == true){ // If the API connection successful,
+					if($response->user == "none" || $response->status != "Active"){
+						echo '<div style="padding:10px;" class="notice notice-error is-dismissible">Sorry, your account is not active. Please use another account.</div>';
+						$auth_email = "Unknown user";
+						update_option('CHN_Account_User', '');
+					}
+				}
 				?>
 					<div class="notice notice-success is-dismissible">
-						<h3>Plugin connected to : <?php echo get_option('CHN_Account_User'); ?> (CHN Account)</h3>
+						<h3>Plugin connected to : <?php echo $auth_email; ?> (CHN Account)</h3>
 						<form method="post" action="options.php">
 							<?php settings_fields('Activation_option_group'); ?>
 							<input type="text" name="CHN_Account_User" value="" style="width:30%; display:none;">
@@ -270,13 +304,14 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 							$auth_email = $_GET['CHNACCOUNTEMAIL'];
 							$auth_token = $_GET['token'];
 							$auth_string = $_SESSION["chnsdauthonce"];
-
+							
 							$_SESSION["chnsdauthonce"] = NULL;
 
 							$auth_api = "https://chnsoftwaredevelopers.com/app_authentication/auth_with_key3.php?email=" . $auth_email . "&token=" . $auth_token . "&string=" . $auth_string;
 							
-							$response = json_decode(file_get_contents($auth_api));
+							$response = json_decode(wp_remote_retrieve_body(wp_remote_get($auth_api)));
 							
+
 							if($response == true){ // If the API connection successful,
 								if($response->email != "none"){
 									?>
@@ -412,7 +447,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 					  
 				<!-- Change text color -->
 				<label for="textcolor">Text color : </label>
-				<input type="text" id="textcolor" name="textcolor" onkeyup="displayInputColors();" value="<?php
+				<input type="text" id="textcolor" name="textcolor" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('textcolor') <> ""){
 				 	echo get_option('textcolor'); 
 					$Message_text_color = "";
@@ -424,7 +459,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				
 				<!-- Change background color -->
 				<label for="backgroundcolor">Background color :</label>
-				<input type="text" id="backgroundcolor" name="backgroundcolor" onkeyup="displayInputColors();" value="<?php
+				<input type="text" id="backgroundcolor" name="backgroundcolor" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('backgroundcolor') <> ""){
 				 	echo get_option('backgroundcolor'); 
 					$Message_background_color = "";
@@ -434,6 +469,14 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
 				 }
 				?>">&nbsp;<label id="backgroundcolorDisplayBox" style="border:2px solid black; padding-left:20px; padding-top:5px; background-color:<?php echo get_option('backgroundcolor'); ?>;"></label>
 				
+				 <br><br>
+				 <div id="colorCombiningWindow" style="display:none;">Loading...<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></div><br>
+				 <div style="width:90%; height:200px; background-color:gray;">
+				 	<div id="backgroundcolorPreview" style="padding-top:10px; padding-bottom:10px; background-color:<?php echo get_option('backgroundcolor'); ?>;">
+				 		<center><h3 id="textcolorPreview" style="color:<?php echo get_option('textcolor'); ?>;">Alert text</h3></center>
+					</div>
+				</div>
+
 				<br><br>
 				
 				<!-- Change font size -->
@@ -549,7 +592,7 @@ add_filter('template_include', 'maintenance_alert_template_select', 99);
             <br>
             * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
             <br>
-            * Version:           1.2.3
+            * Version:           1.3.0
             <br>
             * Requires at least: 5.2
             <br>
