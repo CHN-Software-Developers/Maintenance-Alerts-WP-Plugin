@@ -37,7 +37,9 @@ function showColorCombiningWindow(){
 function displayInputColors(){
     document.getElementById("colorCombiningWindow").style.display = "none";
     document.getElementById("textcolorDisplayBox").style.backgroundColor = document.getElementById("textcolor").value;
-    document.getElementById("textcolorPreview").style.color = document.getElementById("textcolor").value;
+    document.getElementById("backgroundcolorPreview").style.color = document.getElementById("textcolor").value;
+    document.getElementById("backgroundcolorPreview").style.fontSize = document.getElementById("fontSize").value + "px";
     document.getElementById("backgroundcolorDisplayBox").style.backgroundColor = document.getElementById("backgroundcolor").value;
     document.getElementById("backgroundcolorPreview").style.backgroundColor = document.getElementById("backgroundcolor").value;
+    document.getElementById("backgroundcolorPreview").style.padding = document.getElementById("alertPadding").value + "px 5px " + document.getElementById("alertPadding").value + "px 5px";
 }

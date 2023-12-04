@@ -4,7 +4,7 @@ session_start();
 	 * Plugin Name:       Maintenance alerts
 	 * Plugin URI:        https://chnsoftwaredevelopers.com/maintenance-alerts
 	 * Description:       You can use this plugin to show the website maintenance scheduled information to the visitors of your website or put your site into full maintenance mode.
-	 * Version:           1.3.0
+	 * Version:           1.3.1
 	 * Requires at least: 5.2
 	 * Requires PHP:      7.2
 	 * Author:            Himashana
@@ -36,7 +36,7 @@ session_start();
  */
  
 // Include the js scripts that are in the js folder.
-wp_enqueue_script( 'actions', plugins_url( '/js/actions.js', __FILE__ ), array(), "1.2");
+wp_enqueue_script( 'actions', plugins_url( '/js/actions.js', __FILE__ ), array(), "1.3");
 wp_enqueue_style( 'font-awesome', plugin_dir_url(__FILE__).'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
 if(isset($_GET['maintenance_alerts_action'])){
@@ -265,6 +265,29 @@ function plugin_deactivate(){
 		}
 	?>
 
+	<?php
+
+		$updates_api = "https://api.wordpress.org/plugins/info/1.0/maintenance-alerts.json";
+									
+		$response = json_decode(wp_remote_retrieve_body(wp_remote_get($updates_api)));
+
+		if($response == true){ // If the API connection successful,
+			$plugin_data = get_plugin_data(__FILE__);
+			$current_version = $plugin_data['Version'];
+
+			if($response->version != $current_version){
+				?>
+					<div class="notice notice-info is-dismissible">
+						<h2>A new update is available!</h2>
+						<p>Keep the plugin always up to date with new features and security improvements. Your version is <?php echo $current_version; ?> and the latest version is <?php echo $response->version; ?>.</p><br>
+						<a href="<?php echo home_url(); ?>/wp-admin/plugin-install.php?tab=plugin-information&plugin=maintenance-alerts&TB_iframe=true&width=600&height=550&section=changelog"><button class="button button-primary">Update now</button></a>
+						<br><br>
+					</div>
+				<?php
+			}
+		}
+	?>
+	
 	 <!--Connect CHN Account-->
 	 <div class="wrap top-bar-wrapper" style="background-color:white; padding:10px;">
 		 <?php
@@ -471,17 +494,17 @@ function plugin_deactivate(){
 				
 				 <br><br>
 				 <div id="colorCombiningWindow" style="display:none;">Loading...<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></div><br>
-				 <div style="width:90%; height:200px; background-color:gray;">
-				 	<div id="backgroundcolorPreview" style="padding-top:10px; padding-bottom:10px; background-color:<?php echo get_option('backgroundcolor'); ?>;">
-				 		<center><h3 id="textcolorPreview" style="color:<?php echo get_option('textcolor'); ?>;">Alert text</h3></center>
-					</div>
+				 <div style="width:90%; height:200px; background-color:#D1D0C8;">
+				 <center><div id="backgroundcolorPreview" style="font-size:<?php echo get_option('fontSize'); ?>px; color:<?php echo get_option('textcolor'); ?>; padding-top:<?php echo get_option('alertPadding'); ?>px; padding-bottom:<?php echo get_option('alertPadding'); ?>px; background-color:<?php echo get_option('backgroundcolor'); ?>;">
+				 <b>Alert text</b>
+					</div></center>
 				</div>
 
 				<br><br>
 				
 				<!-- Change font size -->
 				<label for="fontSize">Font size :</label>
-				<input type="text" id="fontSize" name="fontSize" value="<?php
+				<input type="text" id="fontSize" name="fontSize" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('fontSize') <> ""){
 				 	echo get_option('fontSize'); 
 					$Message_font_size = "";
@@ -495,7 +518,7 @@ function plugin_deactivate(){
 				
 				<!-- Change padding -->
 				<label for="alertPadding">Padding :</label>
-				<input type="text" id="alertPadding" name="alertPadding" value="<?php
+				<input type="text" id="alertPadding" name="alertPadding" onkeydown="showColorCombiningWindow()" onkeyup="displayInputColors();" value="<?php
 				 if(get_option('alertPadding') <> ""){
 				 	echo get_option('alertPadding'); 
 					$Message_alert_padding = "";
